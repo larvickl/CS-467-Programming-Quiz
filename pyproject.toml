@@ -7,9 +7,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "programming-quiz-web-app"
 authors = [
-    {name = "Vincent Borden", email = ""},
-    {name = "Lindsey Larvick", email = ""},
-    {name = "Andrew Neugarten", email = ""}
+    {name = "Vincent Borden"},
+    {name = "Lindsey Larvick"},
+    {name = "Andrew Neugarten"}
 ]
 description = "A web application for creating and taking programing quizes."
 readme = "README.md"
@@ -31,7 +31,6 @@ dependencies = [
     "Flask-SQLAlchemy",
     "Flask-Migrate",
     "Flask-WTF",
-    "Flask-Login",
     "SQLAlchemy",
     "mysql-connector-python",
 ]
