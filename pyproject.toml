@@ -12,7 +12,7 @@ authors = [
     {name = "Lindsey Larvick"},
     {name = "Andrew Neugarten"}
 ]
-description = "A web application for creating and taking programing quizes."
+description = "A web application for creating and taking programming quizzes."
 readme = "README.md"
 requires-python = ">=3.10"
 keywords = ["quiz", "exam", "programming", "web"]

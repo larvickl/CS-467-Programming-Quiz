@@ -5,6 +5,18 @@ from flask import Flask
 from logging.handlers import RotatingFileHandler
 
 def create_app(app_config: Any) -> Flask:
+    """Create a flask application.
+
+    Parameters
+    ----------
+    app_config : Any
+        The class used to configure the Flask application.
+
+    Returns
+    -------
+    Flask
+        The Flask application.
+    """
     # Create Flask app.
     app = Flask(__name__)
     app.config.from_object(app_config)

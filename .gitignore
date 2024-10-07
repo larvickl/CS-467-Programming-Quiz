@@ -5,6 +5,7 @@ app_secrets/
 developement/
 logs/
 __version__.py
+.vscode/
 
 #################################
 # Python.gitignore (2023-12-28) #

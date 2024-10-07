@@ -17,7 +17,7 @@ class App_Config:
     PERMANENT_SESSION_LIFETIME = dt.timedelta(days=2)
     SESSION_REFRESH_EACH_REQUEST = False
     SEND_FILE_MAX_AGE_DEFAULT = None
-    SERVER_NAME = "127.0.0.1:5000"
+    SERVER_NAME = None
     APPLICATION_ROOT = "/"
     PREFERRED_URL_SCHEME = "https"
     MAX_CONTENT_LENGTH = None
