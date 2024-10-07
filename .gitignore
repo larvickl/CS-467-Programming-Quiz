@@ -4,6 +4,7 @@
 app_secrets/
 developement/
 logs/
+__version__.py
 
 #################################
 # Python.gitignore (2023-12-28) #
