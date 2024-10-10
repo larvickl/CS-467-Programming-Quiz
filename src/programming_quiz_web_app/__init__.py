@@ -2,7 +2,12 @@ import os
 import logging
 from typing import Any
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from logging.handlers import RotatingFileHandler
+
+db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app(app_config: Any) -> Flask:
     """Create a flask application.
@@ -20,6 +25,10 @@ def create_app(app_config: Any) -> Flask:
     # Create Flask app.
     app = Flask(__name__)
     app.config.from_object(app_config)
+
+    # Initialize the database.
+    db.init_app(app)
+    migrate.init_app(app, db, directory=os.path.join(os.path.abspath(os.path.dirname(__file__)), "migrations"))
 
     # Register Blueprints
     from programming_quiz_web_app.main import bp as main_bp
