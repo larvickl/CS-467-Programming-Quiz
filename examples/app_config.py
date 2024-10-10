@@ -1,6 +1,7 @@
 import os
 import datetime as dt
 from app_secrets.secret_key import SECRET_KEY
+from app_secrets.db_credentials import db_host, db_port, db_database, db_username, db_password
 
 deployment_dir = os.path.abspath(os.path.dirname(__file__))  # Directory containing this file.
 
@@ -22,6 +23,14 @@ class App_Config:
     PREFERRED_URL_SCHEME = "https"
     MAX_CONTENT_LENGTH = None
     MAX_COOKIE_SIZE = 4093
+
+    # SQLALCHEMY Config
+    SQLALCHEMY_DATABASE_URI = f"mysql+mysqlconnector://{db_username}:{db_password}@{db_host}:{db_port}/{db_database}"
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 10,
+        'pool_recycle': 60,
+        'pool_pre_ping': True
+        }
 
     # Logging
     APP_LOG_ENABLED = True
