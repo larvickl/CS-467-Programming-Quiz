@@ -1,5 +1,6 @@
 from flask import render_template, send_from_directory
 from programming_quiz_web_app.main import bp
+from programming_quiz_web_app.models import *
 
 @bp.route('/index')
 @bp.route('/')

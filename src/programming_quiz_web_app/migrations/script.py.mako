@@ -7,7 +7,7 @@ Create Date: ${create_date}
 """
 from alembic import op
 import sqlalchemy as sa
-programming_quiz_web_app
+import programming_quiz_web_app
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.
