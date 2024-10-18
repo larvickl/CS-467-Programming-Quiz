@@ -94,6 +94,12 @@ In order to use the "flask" command (e.g., flask run) you must execute the comma
 
 Alternatively, the flask command may be fun from any directory if you either set the FLASK_APP environmental variable to be the path to the WSGI file or use the --app argument with the "flask" command to specify the WSGI file.  Details regarding both of these options may be found in the [Flask documentation](https://flask.palletsprojects.com/en/3.0.x/cli/).
 
+### Add Database Schema
+In order to migrate the database schema to the current version, execute the following command from the directory containing the wsgi.py file.
+```python
+flask db upgrade
+```
+This command MUST be executed on the development server each time a new database migration file is created!
 ## Running the Application
 ### Development Environment
 For development purposes ONLY you may use the Flask development server.  To launch the flask development server, execute the following command from the directory containing the wsgi.py file:
