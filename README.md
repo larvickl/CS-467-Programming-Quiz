@@ -16,7 +16,16 @@ git clone https://github.com/larvickl/CS-467-Programming-Quiz.git
 cd Quiz/CS-467-Programming-Quiz$
 pip install -e .
 ```
-
+### Database
+This application is built with a MySQL/ MariaDB database in mind.  In order to use this application, a database and a database user must be setup.  The following commands from the MySQL shell will create a database and a user:
+```sql
+sudo mysql
+create database <DATABASE_NAME> character set utf8mb4 collate utf8mb4_bin;
+create user '<DATABASE_USER>'@'localhost' identified by '<DATABASE_USER_PASSWORD>';
+grant all privileges on <DATABASE_NAME>.* to '<DATABASE_USER>'@'localhost';
+flush privileges;
+quit;
+```
 ### Application Configuration
 In order to run the web application, a WSGI interface file (wsgi.py) must be created and provided with the appropriate static configuration.  
 
@@ -54,6 +63,16 @@ Restrict access to the secret key.
 chown <APP_USER>:<APP_GROUP> secret_key.py
 chmod 600 app_secrets
 ```
+#### Database Credentials
+The credentials for the database should be stored in a secure location much like the secret key described above.  From within the app_secrets directory, create a file named "db_credentials.py".  Within this file, define the database information as follows:
+```python
+db_host = ""  # Database host.
+db_port = ""  # Database port.
+db_database = ""  # Database name.
+db_username = ""  # Database user username.
+db_password = ""  # Database user password.
+```
+The example configuration file included in this repository should then be able to import this information to format the database URI string for SQLAlchemy.
 #### Configuration File
 Within the "app" directory that we created, create a configuration file.  This configuration file will contain all of the application's static configuration information and will be passed to the Flask factory function at the time of application creation.
 
@@ -75,6 +94,12 @@ In order to use the "flask" command (e.g., flask run) you must execute the comma
 
 Alternatively, the flask command may be fun from any directory if you either set the FLASK_APP environmental variable to be the path to the WSGI file or use the --app argument with the "flask" command to specify the WSGI file.  Details regarding both of these options may be found in the [Flask documentation](https://flask.palletsprojects.com/en/3.0.x/cli/).
 
+### Add Database Schema
+In order to migrate the database schema to the current version, execute the following command from the directory containing the wsgi.py file.
+```python
+flask db upgrade
+```
+This command MUST be executed on the development server each time a new database migration file is created!
 ## Running the Application
 ### Development Environment
 For development purposes ONLY you may use the Flask development server.  To launch the flask development server, execute the following command from the directory containing the wsgi.py file:
