@@ -4,10 +4,12 @@ from typing import Any
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_talisman import Talisman
 from logging.handlers import RotatingFileHandler
 
 db = SQLAlchemy()
 migrate = Migrate()
+talisman = Talisman()
 
 def create_app(app_config: Any) -> Flask:
     """Create a flask application.
@@ -25,6 +27,9 @@ def create_app(app_config: Any) -> Flask:
     # Create Flask app.
     app = Flask(__name__)
     app.config.from_object(app_config)
+
+    # Initialize Flask-Talisman
+    talisman.init_app(app, **app.config["FLASK_TALISMAN_CONFIG"])
 
     # Initialize the database.
     db.init_app(app)

@@ -32,6 +32,16 @@ class App_Config:
         'pool_pre_ping': True
         }
 
+    # Flask-Talisman Config.
+    FLASK_TALISMAN_CONFIG = {
+        "force_https": True,
+        "content_security_policy":{
+            "default-src":["self"],
+            "script-src":["https://cdn.jsdelivr.net"],
+            "style-src":["https://cdn.jsdelivr.net"],
+        },
+    }
+
     # Logging
     APP_LOG_ENABLED = True
     APP_LOG_DIR = os.path.join(deployment_dir, "logs")
