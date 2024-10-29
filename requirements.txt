@@ -1,7 +1,7 @@
 # Flask framework
 Flask==2.3.2
 
-# MySQL connector for Python
+# MySQL Python connector
 mysql-connector-python==8.0.33
 cloud-sql-python-connector==0.9.1 
 
