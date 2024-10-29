@@ -5,11 +5,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_talisman import Talisman
+from flask_wtf.csrf import CSRFProtect
 from logging.handlers import RotatingFileHandler
 
 db = SQLAlchemy()
 migrate = Migrate()
 talisman = Talisman()
+csrf = CSRFProtect()
 
 def create_app(app_config: Any) -> Flask:
     """Create a flask application.
@@ -30,6 +32,9 @@ def create_app(app_config: Any) -> Flask:
 
     # Initialize Flask-Talisman
     talisman.init_app(app, **app.config["FLASK_TALISMAN_CONFIG"])
+
+    # Initialize CSRF protection.
+    csrf.init_app(app)
 
     # Initialize the database.
     db.init_app(app)
