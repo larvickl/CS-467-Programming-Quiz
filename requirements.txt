@@ -1,0 +1,21 @@
+# Flask framework
+Flask==2.3.2
+
+# MySQL connector for Python
+mysql-connector-python==8.0.33
+cloud-sql-python-connector==0.9.1 
+
+# Google Cloud libraries
+google-cloud-secret-manager==2.15.1  
+google-auth==2.22.0 
+gunicorn==20.1.0  
+
+# GitHub integration
+PyGithub==1.59.0
+
+# Database management
+SQLAlchemy==2.0.15
+mysqlclient==2.1.1  
+
+# Environment config
+python-dotenv==1.0.0  
