@@ -35,6 +35,7 @@ dependencies = [
     "Flask-Talisman",
     "SQLAlchemy",
     "mysql-connector-python",
+    'bleach[css]',
 ]
 dynamic = ["version"]
 
