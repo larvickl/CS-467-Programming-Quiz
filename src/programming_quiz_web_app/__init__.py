@@ -4,10 +4,14 @@ from typing import Any
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_talisman import Talisman
+from flask_wtf.csrf import CSRFProtect
 from logging.handlers import RotatingFileHandler
 
 db = SQLAlchemy()
 migrate = Migrate()
+talisman = Talisman()
+csrf = CSRFProtect()
 
 def create_app(app_config: Any) -> Flask:
     """Create a flask application.
@@ -26,6 +30,12 @@ def create_app(app_config: Any) -> Flask:
     app = Flask(__name__)
     app.config.from_object(app_config)
 
+    # Initialize Flask-Talisman
+    talisman.init_app(app, **app.config["FLASK_TALISMAN_CONFIG"])
+
+    # Initialize CSRF protection.
+    csrf.init_app(app)
+
     # Initialize the database.
     db.init_app(app)
     migrate.init_app(app, db, directory=os.path.join(os.path.abspath(os.path.dirname(__file__)), "migrations"))
@@ -33,6 +43,9 @@ def create_app(app_config: Any) -> Flask:
     # Register Blueprints
     from programming_quiz_web_app.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    from programming_quiz_web_app.errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
 
     # Setup Logger.
     if app.config["APP_LOG_ENABLED"] is True and not app.debug:
