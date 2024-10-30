@@ -36,9 +36,9 @@ class App_Config:
     FLASK_TALISMAN_CONFIG = {
         "force_https": True,
         "content_security_policy":{
-            "default-src":["self"],
-            "script-src":["https://cdn.jsdelivr.net"],
-            "style-src":["https://cdn.jsdelivr.net"],
+            "default-src":["'self'"],
+            "script-src":["'self'", "https://cdn.jsdelivr.net"],
+            "style-src":["'self'", "https://cdn.jsdelivr.net"],
         },
     }
 
