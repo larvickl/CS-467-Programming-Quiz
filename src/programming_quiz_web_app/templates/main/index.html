@@ -1,7 +1,131 @@
-{%- extends "base.html" %}
-{%- block app_content %}
-            <h1>Hello, World!</h1>
-            <p>Welcome to the programming quiz!</p>
-{%- endblock %}
-{%- block footer_content %}
-{%- endblock %}
+{% extends 'base.html' %}
+
+{% block title %}
+SPQ
+{% endblock %}
+
+{% block app_head %}
+<style>
+    .hero {
+        background: linear-gradient(to right, #3b0000, #1a0000);
+        color: white;
+        padding: 60px 0;
+    }
+    .hero-content {
+        text-align: left;
+    }
+    .btn-custom {
+        background-color: #000;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block app_content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container d-flex align-items-center">
+        <div class="col-md-4 hero-content">
+            <h1>Make the right hire.<br>The first time.</h1>
+            <p>Custom quizzes, detailed analytics, and automated scoring to help you find the best talent.</p>
+            <a href="#" class="btn btn-custom mt-3">Get started</a>
+        </div>
+        <div class="col-md-8">
+            <img src="placeholder.jpg" alt="Hero Image" class="img-fluid">
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="container my-5">
+
+</section>
+{% endblock %}
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">Logo</a>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Explore</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Solutions</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+            </ul>
+        </div>
+        <div class="d-flex">
+            <a class="nav-link" href="#">Login</a>
+            <a class="btn btn-dark ms-2" href="#">Sign Up</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container d-flex align-items-center">
+        <div class="col-md-4 hero-content">
+            <h1>Make the right hire.<br>The first time.</h1>
+            <p>Custom quizzes, detailed analytics, and automated scoring to help you find the best talent.</p>
+            <a href="#" class="btn btn-custom mt-3">Get started</a>
+        </div>
+        <div class="col-md-8">
+            <img src="placeholder.jpg" alt="Hero Image" class="img-fluid">
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container my-5">
+    <div class="row">
+        <!-- Create (Right side) -->
+        <div class="col-md-6 order-md-2 mb-4">
+            <h3>Create</h3>
+            <h5>Subtitle</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque...</p>
+        </div>
+        <div class="col-md-6 order-md-1 mb-4">
+            <img src="placeholder.png" alt="Create Image" class="img-fluid">
+        </div>
+    </div>
+    <div class="row">
+        <!-- Analyze (Left side, aligned with Decide) -->
+        <div class="col-md-6 mb-4">
+            <h3>Analyze</h3>
+            <h5>Subtitle</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque...</p>
+            <img src="placeholder.png" alt="Analyze Image" class="img-fluid mt-2">
+        </div>
+        <!-- Decide (Right side) -->
+        <div class="col-md-6 mb-4">
+            <h3>Decide</h3>
+            <h5>Subtitle</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque...</p>
+            <img src="placeholder.png" alt="Decide Image" class="img-fluid mt-2">
+        </div>
+    </div>
+    <div class="row text-center my-5">
+        <div class="col">
+            <h2>Ready to Find the Best Developers?</h2>
+            <a href="#" class="btn btn-custom mt-3">Get started</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-light text-center py-3">
+    <div class="container">
+        <p>Copyright © 2024 Site Name</p>
+        <div class="d-flex justify-content-center">
+            <a href="#" class="mx-2">About Us</a>
+            <a href="#" class="mx-2">Contact</a>
+            <a href="#" class="mx-2">Terms</a>
+            <a href="#" class="mx-2">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
