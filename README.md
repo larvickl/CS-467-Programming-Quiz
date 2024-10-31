@@ -80,6 +80,8 @@ A sample configuration file is included in this repository at examples/app_confi
 
 Explanations of the Flask configuration values may be found in the [Flask Documentation](https://flask.palletsprojects.com/en/3.0.x/config/#builtin-configuration-values).
 
+The configuration file MUST contain an entry of type dict named "FLASK_TALISMAN_CONFIG".  This dictonary may contain any of the options ([see Flask-Talismin options](https://github.com/GoogleCloudPlatform/flask-talisman?tab=readme-ov-file#options)) supported by Flask-Talismin.
+
 #### WSGI Interface File
 Now that the configuration is setup, create a WSGI interface file named "wsgi.py" in the same directory as the configuration file.  
 
