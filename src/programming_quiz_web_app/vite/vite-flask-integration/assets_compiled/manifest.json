@@ -1,0 +1,18 @@
+{
+  "assets/react.svg": {
+    "file": "bundled/react-CHdo91hT.svg",
+    "src": "assets/react.svg"
+  },
+  "example.jsx": {
+    "file": "bundled/example-Frqt8m7w.js",
+    "name": "example",
+    "src": "example.jsx",
+    "isEntry": true,
+    "css": [
+      "bundled/example-n_ryQ3BS.css"
+    ],
+    "assets": [
+      "bundled/react-CHdo91hT.svg"
+    ]
+  }
+}
