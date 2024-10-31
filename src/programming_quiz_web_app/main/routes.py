@@ -12,3 +12,8 @@ def index():
 def robots():
     """Return a robots.txt file from the application root directory."""
     return send_from_directory("static", "robots.txt")
+
+@bp.route('/login')
+def login():
+    """This is the endpoint for the login page."""
+    return render_template('auth/login.html', title="Login")

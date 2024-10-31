@@ -1,0 +1,21 @@
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.hero {
+    background: linear-gradient(to right, #3b0000, #1a0000);
+    color: white;
+    padding: 60px 0;
+}
+.hero-content {
+    text-align: left;
+}
+.btn-custom {
+    background-color: #000;
+    color: white;
+}
