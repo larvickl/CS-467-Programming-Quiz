@@ -2,15 +2,13 @@ from programming_quiz_web_app.main import bp
 from programming_quiz_web_app.models import Users
 from models import Users
 from programming_quiz_web_app.main.email import send_reset_email
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from extensions import db
 import datetime as dt
 import pytz
 import jwt 
-from flask import current_app
-
 
 @bp.route('/auth/register', methods=['POST'])
 def register():
@@ -33,7 +31,7 @@ def register():
         surname=surname,
         given_name=given_name,
         account_state="active",
-        account_created=dt.datetime.utcnow(),
+        account_created=dt.datetime.now(pytz.timezone('America/Indiana/Indianapolis')),
         last_login=None
     )
     db.session.add(new_user)
@@ -42,6 +40,7 @@ def register():
     return jsonify({"message": "User registered successfully"}), 201
 
 @bp.route('/auth/login', methods=['POST'])
+@jwt_required
 def login():
     """Authenticate user using JWT token"""
     data = request.get_json()
