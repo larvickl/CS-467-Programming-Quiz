@@ -42,6 +42,10 @@ class App_Config:
         },
     }
 
+    # JWT Config
+    JWT_SECRET_KEY = SECRET_KEY
+    JWT_ACCESS_TOKEN_EXPIRES = dt.timedelta(hours=24)
+
     # Logging
     APP_LOG_ENABLED = True
     APP_LOG_DIR = os.path.join(deployment_dir, "logs")
