@@ -4,7 +4,7 @@ from models import Users
 from programming_quiz_web_app.main.email import send_reset_email
 from flask import request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token
 from extensions import db
 import datetime as dt
 import pytz
@@ -40,7 +40,6 @@ def register():
     return jsonify({"message": "User registered successfully"}), 201
 
 @bp.route('/auth/login', methods=['POST'])
-@jwt_required
 def login():
     """Authenticate user using JWT token"""
     data = request.get_json()
@@ -70,6 +69,7 @@ def request_password_reset():
     data = request.get_json()
     email = data.get('email')
     
+    # Check db for pre-existing email/account
     user = Users.query.filter_by(email=email).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -86,12 +86,13 @@ def request_password_reset():
 
 @bp.route('/auth/reset_password', methods=['POST'])
 def reset_password():
-    """Reset the user's password using the provided token."""
+    """Reset the user's password using the JWT token."""
     data = request.get_json()
     token = data.get('token')
     new_password = data.get('new_password')
     
     try:
+        # Decode the JWT and check validity
         payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
         email = payload['email']
     except jwt.ExpiredSignatureError:
@@ -103,6 +104,7 @@ def reset_password():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
+    # Create new password hash and store
     hashed_password = generate_password_hash(new_password)
     user.password_hash = hashed_password
     db.session.commit()

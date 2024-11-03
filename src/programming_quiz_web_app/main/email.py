@@ -6,3 +6,4 @@ def send_reset_email(to, link):
     msg = Message("Password Reset Request", sender="email@placeholder.com", recipients=[to])
     msg.body = f"To reset your password, click the following link: {link}"
     mail.send(msg)
+    
