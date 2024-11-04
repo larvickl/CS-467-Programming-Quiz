@@ -1,4 +1,4 @@
-from programming_quiz_web_app.extensions import mail
+from programming_quiz_web_app.main import mail
 from flask_mail import Message
 
 def send_reset_email(to, link):
