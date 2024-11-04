@@ -42,6 +42,14 @@ class App_Config:
         },
     }
 
+    # Email Config
+    MAIL_SERVER = 'smtp.email.com'
+    MAIL_PORT = 587 # Standard port for SMTP
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'placeholder@email.com'
+    MAIL_PASSWORD = 'placeholder_password'  
+    MAIL_DEFAULT_SENDER = 'placeholder@email.com'
+
     # Logging
     APP_LOG_ENABLED = True
     APP_LOG_DIR = os.path.join(deployment_dir, "logs")

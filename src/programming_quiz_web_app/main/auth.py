@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 from extensions import db
 import datetime as dt
-import jwt 
+import jwt
 
 @bp.route('/auth/register', methods=['POST'])
 def register():
