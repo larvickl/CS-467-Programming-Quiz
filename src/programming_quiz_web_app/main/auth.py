@@ -7,7 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 from extensions import db
 import datetime as dt
-import pytz
 import jwt 
 
 @bp.route('/auth/register', methods=['POST'])
@@ -31,7 +30,7 @@ def register():
         surname=surname,
         given_name=given_name,
         account_state="active",
-        account_created=dt.datetime.now(pytz.timezone('America/Indiana/Indianapolis')),
+        account_created=dt.datetime.now(dt.timezone.utc),
         last_login=None
     )
     db.session.add(new_user)
@@ -52,7 +51,7 @@ def login():
         return jsonify({"error": "Invalid email or password"}), 401
 
     # Use session and date-time to create timed access token
-    user.last_login = dt.datetime.now(pytz.timezone('America/Indiana/Indianapolis'))
+    user.last_login = dt.datetime.now(dt.timezone.utc)
     db.session.commit()
 
     access_token = create_access_token(identity=user.get_id())
@@ -75,7 +74,7 @@ def request_password_reset():
         return jsonify({"error": "User not found"}), 404
 
     # Generate a reset token
-    token = jwt.encode({'email': email, 'exp':dt.datetime.now(pytz.timezone('America/Indiana/Indianapolis')) + dt.timedelta(hours=24)}, 
+    token = jwt.encode({'email': email, 'exp':dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=24)}, 
                        current_app.config['SECRET_KEY'], algorithm='HS256')
     url = "34.45.239.202" 
     reset_link = f"http://{url}/reset_password?token={token}"
