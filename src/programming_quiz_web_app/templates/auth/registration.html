@@ -14,12 +14,17 @@ Register
         <p>Create an account</p>
         
         <!-- Form -->
-        <form method="POST" action="#">
+        <form method="POST" action="{{ url_for('main.register') }}">
             <div class="mb-3">
                 <input type="email" class="form-control" placeholder="Email" required>
             </div>
-            <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Username" required>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="First name" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Last name" required>
+                </div>
             </div>
             <div class="mb-3">
                 <input type="password" class="form-control" placeholder="Password" required>
