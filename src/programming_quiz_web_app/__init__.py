@@ -7,15 +7,11 @@ from flask_migrate import Migrate
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from logging.handlers import RotatingFileHandler
-from flask_jwt_extended import JWTManager
-from flask_mail import Mail
 
 db = SQLAlchemy()
 migrate = Migrate()
 talisman = Talisman()
 csrf = CSRFProtect()
-jwt = JWTManager()
-mail = Mail()
 
 def create_app(app_config: Any) -> Flask:
     """Create a flask application.
@@ -43,12 +39,6 @@ def create_app(app_config: Any) -> Flask:
     # Initialize the database.
     db.init_app(app)
     migrate.init_app(app, db, directory=os.path.join(os.path.abspath(os.path.dirname(__file__)), "migrations"))
-    
-    # Initialize the JWT manager
-    jwt.init_app(app)
-
-    # Intitialize emails 
-    mail.init_app(app)
 
     # Register Blueprints
     from programming_quiz_web_app.main import bp as main_bp
