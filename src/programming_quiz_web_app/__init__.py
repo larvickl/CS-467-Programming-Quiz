@@ -47,6 +47,9 @@ def create_app(app_config: Any) -> Flask:
     from programming_quiz_web_app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
 
+    from programming_quiz_web_app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+
     # Setup Logger.
     if app.config["APP_LOG_ENABLED"] is True and not app.debug:
         log_file_dir = app.config["APP_LOG_DIR"]

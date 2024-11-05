@@ -14,7 +14,7 @@ Register
         <p>Create an account</p>
         
         <!-- Form -->
-        <form method="POST" action="{{ url_for('main.register') }}">
+        <form method="POST" action="{{ url_for('auth.register') }}">
             <div class="mb-3">
                 <input type="email" class="form-control" placeholder="Email" required>
             </div>
@@ -36,7 +36,7 @@ Register
         </form>
 
         <!-- Login-->
-        <p class="mt-3">Already have an account? <a href="{{ url_for('main.login') }}">Log in</a></p>
+        <p class="mt-3">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
         </div>
     </div>
 {% endblock %}
