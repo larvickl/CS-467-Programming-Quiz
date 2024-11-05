@@ -12,13 +12,15 @@ Login
         <p>Log in to your account</p>
         
         <!-- Form -->
-        <form method="POST" action="#">
+        <form method="POST" action="{{ url_for('auth.login') }}">
             <div class="mb-3">
-                <input type="email" class="form-control" placeholder="Email">
+                <input type="email" class="form-control" placeholder="Email" required>
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Password">
+                <input type="password" class="form-control" placeholder="Password" required>
             </div>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <button type="submit" class="btn btn-dark w-100">Log In</button>
         </form>
         <!-- Forgot password/Sign up-->
@@ -26,7 +28,7 @@ Login
             <a href="#">Forgot password?</a>
         </div>
         <div class="mt-2">
-            <p>Don't have an account? <a href="#">Sign up</a></p>
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Sign up</a></p>
         </div>
     </div>
 {% endblock %}

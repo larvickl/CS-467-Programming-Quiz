@@ -32,6 +32,8 @@ Register
             <div class="mb-3">
                 <input type="password" class="form-control" placeholder="Confirm password" required>
             </div>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <button type="submit" class="btn btn-dark w-100">Sign up</button>
         </form>
 
