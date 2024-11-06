@@ -1,9 +1,9 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import path from "node:path";
 
-import { defineConfig } from "vite";
-
 export default defineConfig({
-  root: path.join(__dirname, "./src/"),
+  root: path.join(__dirname, "./assets_source/"),
   base: "/assets/",
   build: {
     outDir: path.join(__dirname, "./assets_compiled/"),
@@ -11,10 +11,11 @@ export default defineConfig({
     assetsDir: "bundled",
     rollupOptions: {
         input: [
-          "src/example.jsx",
+          "assets_source/App.tsx",
         ],
     },
     emptyOutDir: true,
     copyPublicDir: false,
   },
+  plugins: [react()],
 });
