@@ -27,9 +27,20 @@
             {%- block app_content %}{% endblock %}
         </div>
         <footer>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            {%- if not is_vite_production %}
+            <script type="module" src="{{ vite_asset('@vite/client') }}"></script>
+            {#- see https://github.com/vitejs/vite/issues/1984 #}
+            <script type="module">
+                import RefreshRuntime from "{{ vite_asset('@react-refresh') }}"
+                RefreshRuntime.injectIntoGlobalHook(window)
+                window.$RefreshReg$ = () => {}
+                window.$RefreshSig$ = () => (type) => type
+                window.__vite_plugin_react_preamble_installed__ = true
+            </script>
+            {%- endif %}
             {%- block footer_content %}{% endblock %}
         </footer>
         {%- endblock %}
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>

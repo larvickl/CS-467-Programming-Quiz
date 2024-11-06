@@ -48,3 +48,7 @@ class App_Config:
     APP_LOG_FILE_NAME = "programming_quiz.log"
     APP_LOG_FILE_MAX_BYTES = 51200  # 50KiB
     APP_LOG_FILE_BACKUP_COUNT = 10
+
+    # Vite Config.
+    VITE_MODE = "production"
+    VITE_ORIGIN = "http://localhost:5173"
