@@ -11,11 +11,14 @@ export default defineConfig({
     assetsDir: "bundled",
     rollupOptions: {
         input: [
-          "assets_source/App.tsx",
+          "assets_source/main.tsx",
         ],
     },
     emptyOutDir: true,
     copyPublicDir: false,
+  },
+  server: {
+    origin: 'http://127.0.0.1:5173',
   },
   plugins: [react()],
 });

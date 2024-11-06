@@ -1,0 +1,7 @@
+{%- extends "base.html" %}
+{%- block app_content %}
+    <div class="vite_example_root" id="vite_example"></div>
+{%- endblock %}
+{%- block footer_content %}
+    {{ vite_asset('main.tsx')|safe }}
+{%- endblock %}

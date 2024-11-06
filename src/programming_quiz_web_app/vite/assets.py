@@ -40,9 +40,10 @@ def add_context() -> dict[str, bool | Callable[[str], str]]:
         Returns
         -------
         str
-            The path to the development asset.
+            The HTML to load the development asset.
         """
-        return f"{vite_origin}/assets/{file_path}"
+        asset_path = f"{vite_origin}/assets/{file_path}"
+        return f'<script type="module" src="{asset_path}"></script>'
 
     def get_production_asset(file_path: str) -> str:
         """Return the path to the compiled asset in production mode.
@@ -55,7 +56,7 @@ def add_context() -> dict[str, bool | Callable[[str], str]]:
         Returns
         -------
         str
-            The path to the compiled asset.
+            The HTML to load the development asset (JS and CSS).
 
         Raises
         ------
@@ -67,16 +68,25 @@ def add_context() -> dict[str, bool | Callable[[str], str]]:
         # Load the manifest file.
         assets_compiled_path = os.path.join(project_path, "assets_compiled")
         manifest_path = os.path.join(assets_compiled_path, "manifest.json")
+        asset_html = ""
         try:
             with open(manifest_path, "r") as fd:
                 manifest = json.load(fd)
         except OSError as the_exception:
             raise OSError(f"Manifest file not found.") from the_exception
-        # Return path to the production asset.
+        # Return path to the production assets.
         try:
-            return f"/assets/{manifest[file_path]['file']}"
+            # Add CSS file(s) to HTML.
+            if "css" in manifest[file_path].keys():
+                for css_file in manifest[file_path]["css"]:
+                    asset_css_path = f"/assets/{css_file}"
+                    asset_html = asset_html + f'\n<link rel="stylesheet" href="{asset_css_path}">'
+            # Add Script to HTML.
+            asset_script_path = f"/assets/{manifest[file_path]['file']}"
+            asset_html = asset_html + f'\n<script type="module" src="{asset_script_path}"></script>'
         except KeyError as the_exception:
             raise KeyError(f"Asset: {file_path} not found.") from the_exception
+        return asset_html
     
     return {
         "vite_asset": get_production_asset if is_vite_production else get_development_asset,
