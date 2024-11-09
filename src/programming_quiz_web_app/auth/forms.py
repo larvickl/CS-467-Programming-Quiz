@@ -25,13 +25,13 @@ class RegistrationValidator(FlaskForm):
         Email(),
         Length(max=300, message='Email must be less than 300 characters')
     ])
-    given_name = StringField('Given Name', validators=[
+    given_name = StringField('First Name', validators=[
         DataRequired(),
-        Length(max=100, message='Given name must be less than 100 characters')
+        Length(max=100, message='First Name must be less than 100 characters')
     ])
-    surname = StringField('Surname', validators=[
+    surname = StringField('Last Name', validators=[
         DataRequired(),
-        Length(max=100, message='Surname must be less than 100 characters')
+        Length(max=100, message='Last Name must be less than 100 characters')
     ])
     password = PasswordField('Password', validators=[
         DataRequired(),
