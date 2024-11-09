@@ -31,13 +31,7 @@ def register():
                 db.session.rollback()
                 flash('Registration failed. Please try again.', 'danger')
                 print(f"Registration error: {str(e)}")
-        else:
-            # If form validation failed, flash the first error
-            for field, errors in form.errors.items():
-                flash(f"{errors[0]}", 'danger')
-                break
-    
-    return render_template('auth/registration.html', title="Register")
+    return render_template('auth/registration.html', title="Register", form=form)
 
 @bp.route('/login')
 def login():

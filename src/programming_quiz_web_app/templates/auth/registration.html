@@ -1,40 +1,52 @@
 {% extends "base.html" %}
-
-{% block title %}
-Register
-{% endblock %}
-
 {% block navbar %}
     {% include 'navbars/navbar2.html' %}
 {% endblock %}
 
 {% block app_content %}
+    {# Form Validation Messages #}
+    {% if form.errors %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h6>Form Validation Errors:</h6>
+        <ul>
+        {% for field, errors in form.errors.items() %}
+            <li>{{ form[field].label }}: {{ ', '.join(errors) }}</li>
+        {% endfor %}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
     <div class="login-container">
         <h2>Welcome!</h2>
         <p>Create an account</p>
         
         <!-- Form -->
-        <form method="POST" action="{{ url_for('auth.register') }}">
+        <form method="POST" action="" novalidate>
+            {{ form.hidden_tag() }}
             <div class="mb-3">
-                <input type="email" class="form-control" placeholder="Email" required>
+                {{form.email.label()}}
+                {{ form.email(class="form-control is-invalid" if form.email.errors else "form-control", placeholder="Email") }}
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="First name" required>
+                    {{form.given_name.label()}}
+                    {{form.given_name(class="form-control is-invalid" if form.given_name.errors else "form-control", placeholder="First name") }}
                 </div>
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Last name" required>
+                    {{form.surname.label()}}
+                    {{form.surname(class="form-control is-invalid" if form.surname.errors else "form-control", placeholder="Last name") }}
                 </div>
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Password" required>
+                {{form.password.label()}}
+                {{form.password(class="form-control is-invalid" if form.password.errors else "form-control", placeholder="Password") }}
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Confirm password" required>
+                {{form.confirm_password.label()}}
+                {{form.confirm_password(class="form-control is-invalid" if form.confirm_password.errors else "form-control", placeholder="Confirm Password") }}
             </div>
-
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <button type="submit" class="btn btn-dark w-100">Sign up</button>
+            {{form.submit(class="btn btn-dark w-100") }}
         </form>
 
         <!-- Login-->
