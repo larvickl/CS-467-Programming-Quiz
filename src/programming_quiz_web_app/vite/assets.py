@@ -2,7 +2,7 @@ import json
 import os
 from flask import current_app
 from typing import Callable
-from programming_quiz_web_app.vite import bp
+from programming_quiz_web_app.vite import bp, project_path
 
 @bp.app_context_processor
 def add_context() -> dict[str, bool | Callable[[str], str]]:
@@ -24,7 +24,6 @@ def add_context() -> dict[str, bool | Callable[[str], str]]:
     # Get VITE config.
     vite_mode = current_app.config["VITE_MODE"]
     vite_origin = current_app.config["VITE_ORIGIN"]
-    project_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vite-flask-integration")
 
     # Check if in production mode
     is_vite_production = True if vite_mode.lower() == "production" else False
