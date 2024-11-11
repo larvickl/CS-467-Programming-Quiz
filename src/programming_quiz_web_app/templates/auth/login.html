@@ -19,7 +19,7 @@ Login
                 {{ form.email(class="form-control", placeholder="Email") }}
             </div>
             <div class="mb-3">
-                {{ form.password(class="form-control" + (' is-invalid' if form.password.errors else ''), placeholder="Password") }}
+                {{ form.password(class="form-control", placeholder="Password") }}
                 {% if form.password.errors %}
                     <div class="invalid-feedback d-block">
                         {{ form.password.errors[0] }}
