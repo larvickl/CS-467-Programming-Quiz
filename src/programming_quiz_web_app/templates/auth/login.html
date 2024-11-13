@@ -15,11 +15,17 @@ Login
         <form method="POST" action="" novalidate>
             {{ form.hidden_tag() }}
             <div class="mb-3">
-                {{ form.email.label() }}
-                {{ form.email(class="form-control", placeholder="Email") }}
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.email.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
             <div class="mb-3">
-                {{ form.password(class="form-control", placeholder="Password") }}
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control") }}
                 {% if form.password.errors %}
                     <div class="invalid-feedback d-block">
                         {{ form.password.errors[0] }}
