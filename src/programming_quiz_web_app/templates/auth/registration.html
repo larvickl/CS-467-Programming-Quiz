@@ -9,18 +9,6 @@ Register
 {% endblock %}
 
 {% block app_content %}
-    {# Form Validation Messages #}
-    {% if form.errors %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <h6>Form Validation Errors:</h6>
-        <ul>
-        {% for field, errors in form.errors.items() %}
-            <li>{{ form[field].label }}: {{ ', '.join(errors) }}</li>
-        {% endfor %}
-        </ul>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
     <div class="login-container">
         <h2>Welcome!</h2>
         <p>Create an account</p>
@@ -29,21 +17,57 @@ Register
         <form method="POST" action="" novalidate>
             {{ form.hidden_tag() }}
             <div class="mb-3">
-                {{ form.email(class="form-control is-invalid" if form.email.errors else "form-control", placeholder="Email") }}
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.email.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- first and last name fields -->
             <div class="row mb-3">
                 <div class="col-md-6">
-                    {{form.given_name(class="form-control is-invalid" if form.given_name.errors else "form-control", placeholder="First name") }}
+                    <label for="{{ form.given_name.id }}" class="form-label">First name</label>
+                    {{form.given_name(class="form-control") }}
+                    {% if form.given_name.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.given_name.errors[0] }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-6">
-                    {{form.surname(class="form-control is-invalid" if form.surname.errors else "form-control", placeholder="Last name") }}
+                    <label for="{{ form.surname.id }}" class="form-label">Last name</label>
+                    {{form.surname(class="form-control") }}
+                    {% if form.surname.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.surname.errors[0] }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
+
+            <!-- password -->
             <div class="mb-3">
-                {{form.password(class="form-control is-invalid" if form.password.errors else "form-control", placeholder="Password") }}
+                {{ form.password.label(class="form-label") }}
+                {{form.password(class="form-control") }}
+                {% if form.password.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.password.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- confirm password -->
             <div class="mb-3">
-                {{form.confirm_password(class="form-control is-invalid" if form.confirm_password.errors else "form-control", placeholder="Confirm Password") }}
+                <label for="{{ form.confirm_password.id }}" class="form-label">Confirm password</label>
+                {{form.confirm_password(class="form-control") }}
+                {% if form.confirm_password.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.confirm_password.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
             {{form.submit(class="btn btn-dark w-100") }}
         </form>
