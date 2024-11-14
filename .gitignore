@@ -7,8 +7,6 @@ logs/
 __version__.py
 .vscode/
 
-
-
 #################################
 # Python.gitignore (2023-12-28) #
 #################################
@@ -308,9 +306,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# Ignore the Assignments model
-src/programming_quiz_web_app/models.py
-
-# Ignore specific migration scripts
-src/programming_quiz_web_app/migrations/versions/63e55cc6f3f7_.py
