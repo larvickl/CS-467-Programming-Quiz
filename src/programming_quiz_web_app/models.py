@@ -165,7 +165,7 @@ class Assignments(db.Model):
     start_time: Mapped[Optional[dt.datetime]] = db.mapped_column(TZDateTime)
     submit_time: Mapped[Optional[dt.datetime]] = db.mapped_column(TZDateTime)
     score: Mapped[Optional[float]] = db.mapped_column(db.Double)
-    url: Mapped[Optional[str]] = db.mapped_column(TEXT, unique=True)
+    url: Mapped[Optional[str]] = db.mapped_column(db.String(2048), unique=True)
     url_pin: Mapped[Optional[str]] = db.mapped_column(db.String(10))
     # Foreign keys.
     assigned_by_id: Mapped[int] = db.mapped_column(

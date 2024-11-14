@@ -1,8 +1,8 @@
-"""Initial database version.
+"""Initial migration (Take 2)
 
-Revision ID: 63e55cc6f3f7
+Revision ID: eafa4e09b4c1
 Revises: 
-Create Date: 2024-10-17 19:57:39.059656
+Create Date: 2024-11-13 14:37:09.462407
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import programming_quiz_web_app
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '63e55cc6f3f7'
+revision = 'eafa4e09b4c1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -88,7 +88,7 @@ def upgrade():
     sa.Column('start_time', programming_quiz_web_app.models.TZDateTime(), nullable=True),
     sa.Column('submit_time', programming_quiz_web_app.models.TZDateTime(), nullable=True),
     sa.Column('score', sa.Double(), nullable=True),
-    sa.Column('url', mysql.TEXT(), nullable=True),
+    sa.Column('url', sa.String(length=2048), nullable=True),
     sa.Column('url_pin', sa.String(length=10), nullable=True),
     sa.Column('assigned_by_id', sa.Integer(), nullable=False),
     sa.Column('quiz_id', sa.Integer(), nullable=False),
