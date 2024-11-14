@@ -1,7 +1,60 @@
-{%- extends "base.html" %}
-{%- block app_content %}
-            <h1>Hello, World!</h1>
-            <p>Welcome to the programming quiz!</p>
-{%- endblock %}
-{%- block footer_content %}
-{%- endblock %}
+{% extends 'base.html' %}
+
+{% block title %}
+SPQ
+{% endblock %}
+
+{% block app_content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container d-flex align-items-center">
+        <div class="col-md-4 hero-content">
+            <h1>Make the right hire.<br>The first time.</h1>
+            <p>Custom quizzes, detailed analytics, and automated scoring to help you find the best talent.</p>
+            <a href="#" class="btn btn-custom mt-3">Get started</a>
+        </div>
+        <div class="container d-flex align-items-center">
+            <div class="col-md-8 d-flex justify-content-center align-items-center"></div>
+                <img src="{{ url_for('static', filename='images/150x150.png') }}" alt="placeholder.jpg" alt="Hero Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container my-5">
+    <div class="row">
+        <!-- Create (Right side) -->
+        <div class="col-md-6 order-md-2 mb-4">
+            <h3>Create</h3>
+            <h5>Subtitle</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque...</p>
+        </div>
+        <div class="col-md-6 order-md-1 mb-4">
+            <img src="{{ url_for('static', filename='images/150x150.png') }}" alt="Create Image" class="img-fluid">
+        </div>
+    </div>
+    <div class="row">
+        <!-- Analyze (Left side, aligned with Decide) -->
+        <div class="col-md-6 mb-4">
+            <h3>Analyze</h3>
+            <h5>Subtitle</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque...</p>
+            <img src="{{ url_for('static', filename='images/150x150.png') }}" alt="Analyze Image" class="img-fluid mt-2">
+        </div>
+        <!-- Decide (Right side) -->
+        <div class="col-md-6 mb-4">
+            <h3>Decide</h3>
+            <h5>Subtitle</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque...</p>
+            <img src="{{ url_for('static', filename='images/150x150.png') }}" alt="Decide Image" class="img-fluid mt-2">
+        </div>
+    </div>
+    <div class="row text-center my-5">
+        <div class="col">
+            <h2>Ready to Find the Best Developers?</h2>
+            <a href="#" class="btn btn-custom mt-3">Get started</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

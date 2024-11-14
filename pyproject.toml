@@ -31,7 +31,7 @@ dependencies = [
     "Flask",
     "Flask-SQLAlchemy",
     "Flask-Migrate",
-    "Flask-WTF",
+    "Flask-WTF[email]",
     "Flask-Talisman",
     "SQLAlchemy",
     "mysql-connector-python",
