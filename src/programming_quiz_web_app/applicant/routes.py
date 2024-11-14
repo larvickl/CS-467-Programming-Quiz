@@ -1,4 +1,4 @@
-from flask import render_template, send_from_directory, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request
 from programming_quiz_web_app.applicant import bp
 from programming_quiz_web_app.main import bp
 from programming_quiz_web_app.models import *
