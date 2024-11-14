@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+Confirm Start Quiz
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block app_content %}
+    <div class="confirmation-container">
+        <h2>Ready to Begin?</h2>
+        <p>Are you sure you want to start the quiz: {{ quiz.name }}?</p>
+        
+        <!-- Confirmation -->
+        <form method="POST" action="{{ url_for('main.confirm_start_quiz', id=quiz.id) }}">
+            <input type="hidden" name="confirm" value="yes">
+            <button type="submit" class="btn btn-dark w-100">Yes, Start Quiz</button>
+        </form>
+        
+        <!-- Cancel Option -->
+        <div class="mt-3">
+            <a href="{{ url_for('main.index') }}" class="btn btn-dark w-100">Cancel</a>
+        </div>
+    </div>
+{% endblock %}

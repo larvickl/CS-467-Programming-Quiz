@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+Confirm Submit Quiz
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block app_content %}
+    <div class="confirmation-container">
+        <h2>Submit Your Quiz</h2>
+        <p>Are you sure you want to submit the quiz: {{ quiz.name }}?</p>
+        
+        <!-- Confirmation Form -->
+        <form method="POST" action="#">
+            <input type="hidden" name="confirm" value="yes">
+            <button type="submit" class="btn btn-danger w-100">Yes, Submit Quiz</button>
+        </form>
+        
+        <!-- Cancel Option -->
+        <div class="mt-3">
+            <a href="{{ url_for('main.take_quiz', quiz_id=quiz.id) }}" class="btn btn-dark w-100">Cancel</a>
+        </div>
+    </div>
+{% endblock %}
