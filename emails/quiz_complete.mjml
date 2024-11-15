@@ -1,0 +1,79 @@
+<mjml>
+    <mj-head>
+        <mj-title>Quiz Assigned</mj-title>
+    </mj-head>
+    <mj-body background-color="#f0f0f0">
+        <mj-wrapper background-color="#f8f8ff" padding-top="0px" border-radius="0.375rem">
+            <mj-section background-color="#cfe2ff" border-radius="0.375rem">
+                <mj-column>
+                    <mj-text  align="center" font-size="24px" color="#052c65">
+                    Quiz Assigned!
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section>
+                <mj-column>
+                    <mj-text font-family="Helvetica" align="left" font-size="18px" color="#000000">
+                        {{quiz_name}}
+                    </mj-text>
+                    <mj-table>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td>
+                                &bull; Due:  {{due_datetime_string}}
+                            </td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td>
+                                &bull; Allowed Time:  {{allowd_time}}
+                            </td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td>
+                                &bull; Quiz PIN:  {{quiz_pin}}
+                            </td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td>
+                                &bull; Assigned By:  
+                                <a href="mailto:{{assigned_by_email}}" target="_blank" style="text-decoration:underline">{{assigned_by_name}}</a>
+                            </td>
+                        </tr>
+                    </mj-table>
+                    <mj-text font-family="Helvetica" line-height="120%" align="left" color="#000000">
+                        <p style="font-size:18px">Instructions</p>
+                        <p style="font-size:13px">
+                        You have been been assigned the quiz listed above.  When ready, please 
+                        click the "Start Quiz" button below.  You will be asked for the PIN listed
+                        above.
+                        </p>
+                        <p>
+                        Please note once you start the quiz you MUST complete it in 
+                        one sitting.  Do not close the window until the quiz has been submitted.
+                        </p>
+                        <p style="font-size:13px">
+                        Also note that the quiz must be submitted (not started) by the
+                        due date listed above.
+                        </p>
+                        <p style="font-size:13px">
+                        Please do not reply to this email.  Questions about the quiz should be 
+                        directed to the indivisual who assigned the quiz (listed above).  Questions 
+                        about this service should be directed to the email address the bottom of 
+                        this email.
+                        </p>
+                    </mj-text>
+                    <mj-button font-family="Helvetica" background-color="#157347" color="white" href="{{quiz_url}}">
+                        Start Quiz
+                    </mj-button>
+                </mj-column>
+            </mj-section>
+        </mj-wrapper>
+        <mj-section>
+            <mj-column>
+                <mj-text align="center" font-size="12px" color="#999">
+                Questions? Email 
+                <a href="mailto:{{contact_email}}" target="_blank" style="color:#999;text-decoration:underline">{{contact_email}}</a>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>
