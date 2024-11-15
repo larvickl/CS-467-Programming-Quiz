@@ -24,7 +24,7 @@
                         </tr>
                         <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
                             <td>
-                                &bull; Allowed Time:  {{allowd_time}}
+                                &bull; Allowed Time:  {{allowed_time}}
                             </td>
                         </tr>
                         <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
@@ -56,7 +56,7 @@
                         </p>
                         <p style="font-size:13px">
                         Please do not reply to this email.  Questions about the quiz should be 
-                        directed to the indivisual who assigned the quiz (listed above).  Questions 
+                        directed to the individual who assigned the quiz (listed above).  Questions 
                         about this service should be directed to the email address the bottom of 
                         this email.
                         </p>
