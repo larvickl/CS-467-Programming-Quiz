@@ -1,0 +1,16 @@
+Quiz Assigned!
+==============
+
+{{quiz_name}}
+{{ "-" * quiz_name|length }}
+* Due:  {{due_datetime_string}}
+* Submitted At: {{submitted_time}} 
+* Assigned By: {{assigned_by_name}} ({{assigned_by_email}})
+
+Important Notes:
+----------------
+* The above quiz has been successfully submitted.
+* Please do not reply to this email.
+
+
+Service Questions? Email {{contact_email}}
