@@ -18,49 +18,59 @@
                     </mj-text>
                     <mj-table>
                         <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
-                            <td>
-                                &bull; Due:  {{due_datetime_string}}
-                            </td>
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">Due:  {{due_datetime_string}}</td>
                         </tr>
                         <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
-                            <td>
-                                &bull; Allowed Time:  {{allowed_time}}
-                            </td>
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">Allowed Time:  {{allowed_time}}</td>
                         </tr>
                         <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
-                            <td>
-                                &bull; Quiz PIN:  {{quiz_pin}}
-                            </td>
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">Quiz PIN:  {{quiz_pin}}</td>
                         </tr>
                         <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
-                            <td>
-                                &bull; Assigned By:  
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">
+                                Assigned By:  
                                 <a href="mailto:{{assigned_by_email}}" target="_blank" style="text-decoration:underline">{{assigned_by_name}}</a>
                             </td>
                         </tr>
                     </mj-table>
-                    <mj-text font-family="Helvetica" line-height="120%" align="left" color="#000000">
-                        <p style="font-size:18px">Instructions</p>
-                        <p style="font-size:13px">
-                        You have been been assigned the quiz listed above.  When ready, please 
-                        click the "Start Quiz" button below.  You will be asked for the PIN listed
-                        above.
-                        </p>
-                        <p>
-                        Please note once you start the quiz you MUST complete it in 
-                        one sitting.  Do not close the window until the quiz has been submitted.
-                        </p>
-                        <p style="font-size:13px">
-                        Also note that the quiz must be submitted (not started) by the
-                        due date listed above.
-                        </p>
-                        <p style="font-size:13px">
-                        Please do not reply to this email.  Questions about the quiz should be 
-                        directed to the individual who assigned the quiz (listed above).  Questions 
-                        about this service should be directed to the email address the bottom of 
-                        this email.
-                        </p>
+                    <mj-text font-family="Helvetica" font-size="18px" line-height="120%" align="left" color="#000000">
+                        Instructions
                     </mj-text>
+                    <mj-table>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td width="13" align="center" valign="top">1.</td>
+                            <td width="200" align="left" valign="top">Click the "Start Quiz" button below.</td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td width="13" align="center" valign="top">2.</td>
+                            <td width="200" align="left" valign="top">Enter your PIN when prompted.</td>
+                        </tr>
+                    </mj-table>
+                    <mj-text font-family="Helvetica" font-size="18px" line-height="120%" align="left" color="#000000">
+                        Important Notes
+                    </mj-text>
+                    <mj-table>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">You MUST complete the quiz in one sitting.</td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">Do not close your browser window or navigate away from the quiz until you have submitted the quiz.</td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">The quiz must be submitted (not just started) by the due date listed above.</td>
+                        </tr>
+                        <tr style="text-align:left;font-size:13px;font-family:Helvetica;">
+                            <td width="13" align="center" valign="top">&bull;</td>
+                            <td width="200" align="left" valign="top">Please do not reply to this email.</td>
+                        </tr>
+                    </mj-table>
                     <mj-button font-family="Helvetica" background-color="#157347" color="white" href="{{quiz_url}}">
                         Start Quiz
                     </mj-button>
