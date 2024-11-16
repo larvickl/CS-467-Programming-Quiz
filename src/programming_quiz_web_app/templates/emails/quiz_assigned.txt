@@ -10,13 +10,15 @@ Quiz Assigned!
 
 Instructions:
 -------------
-You have been been assigned the quiz listed above. When ready, please click the "Start Quiz" button below. You will be asked for the PIN listed above. 
+1. Click the "Start Quiz" button below.
+2. Enter your PIN when prompted.
 
-Please note once you start the quiz you MUST complete it in one sitting. Do not close the window until the quiz has been submitted. 
-
-Also note that the quiz must be submitted (not started) by the due date listed above. 
-
-Please do not reply to this email. Questions about the quiz should be directed to the individual who assigned the quiz (listed above). Questions about this service should be directed to the email address the bottom of this email. 
+Important Notes:
+----------------
+* You MUST complete the quiz in one sitting.
+* Do not close your browser window or navigate away from the quiz until you have submitted the quiz.
+* The quiz must be submitted (not just started) by the due date listed above.
+* Please do not reply to this email.
 
 Start Quiz URL:
 ---------------
