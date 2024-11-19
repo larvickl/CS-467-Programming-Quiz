@@ -85,8 +85,23 @@
 }
 .assigned-quizzes {
     word-wrap: break-word;
-    max-width: 200px;  /* Adjust this value based on your needs */
+    max-width: 200px;  
 }
 .actions-cell {
     white-space: nowrap;  /* Keeps actions on one line */
+}
+/* Quiz Details */
+.content-container {
+    padding: 40px;
+}
+.progress {
+    height: 20px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    background-color: #1a0000;
+    height: 100%;
+    min-height: 20px;
+    min-width: 19% !important;
 }
