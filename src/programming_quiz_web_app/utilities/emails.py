@@ -1,5 +1,5 @@
 import datetime as dt
-from flask import render_template, current_app
+from flask import render_template, current_app, url_for
 from smtplib import SMTP, SMTP_SSL
 from email.message import EmailMessage
 from email.headerregistry import Address
@@ -117,6 +117,8 @@ def send_quiz_assigned_email(
         time_limit_string = f"{minutes} minutes, {seconds} seconds"
     else:
         time_limit_string = f"{seconds} seconds"
+    # Make URL:
+    quiz_url = f'{url_for("main.confirm_start_quiz", _external=True)}/{assignment.url}'
     # Generate ASCII email body.
     ascii_email = render_template(
         "emails/quiz_assigned.txt",
@@ -126,7 +128,7 @@ def send_quiz_assigned_email(
         quiz_pin = assignment.url_pin,
         assigned_by_name = f"{assigned_by.given_name} {assigned_by.surname}",
         assigned_by_email = assigned_by.email,
-        quiz_url = assignment.url,
+        quiz_url = quiz_url,
         contact_email = current_app.config["CONTACT_EMAIL_ADDRESS"])
     # Generate HTML email body.
     html_email = render_template(
@@ -137,7 +139,7 @@ def send_quiz_assigned_email(
         quiz_pin = assignment.url_pin,
         assigned_by_name = f"{assigned_by.given_name} {assigned_by.surname}",
         assigned_by_email = assigned_by.email,
-        quiz_url = assignment.url,
+        quiz_url = quiz_url,
         contact_email = current_app.config["CONTACT_EMAIL_ADDRESS"])
     # Send Email.
     send_email(email_to, email_cc, email_bcc, subject, ascii_email, html_email)
