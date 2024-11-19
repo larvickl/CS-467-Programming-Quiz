@@ -15,7 +15,6 @@ talisman = Talisman()
 csrf = CSRFProtect()
 jwt = JWTManager()
 
-
 def create_app(app_config_env_var: str = "FLASK_APP_CONFIG", app_config_prefix: str = "SPQ_CONFIG") -> Flask:
     """Create a flask application.
 
