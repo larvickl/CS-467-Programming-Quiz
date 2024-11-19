@@ -227,7 +227,7 @@ def seed_data():
             given_name="James",
             timezone="America/New_York"
         )
-        
+
         applicant2 = Applicants(
             email="emily.lee@example.com",
             surname="Lee",
@@ -239,7 +239,7 @@ def seed_data():
 
         # Commit changes to the database.
         db.session.commit()
-        print("Seed data added successfully.")
+        print("Data added successfully.")
 
     except Exception as e:
         db.session.rollback()
