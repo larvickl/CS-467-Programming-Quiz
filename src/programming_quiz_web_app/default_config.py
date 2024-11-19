@@ -1,8 +1,5 @@
-import os
 import datetime as dt
 from email.headerregistry import Address
-
-deployment_dir = os.path.abspath(os.path.dirname(__file__))  # Directory containing this file.
 
 class App_Config:
     # Flask Config
@@ -33,15 +30,15 @@ class App_Config:
     FLASK_TALISMAN_CONFIG = {
         "force_https": True,
         "content_security_policy":{
-            "default-src":["self"],
-            "script-src":["https://cdn.jsdelivr.net"],
-            "style-src":["https://cdn.jsdelivr.net"],
+            "default-src":["'self'", "data:"],
+            "script-src":["'self'", "https://cdn.jsdelivr.net"],
+            "style-src":["'self'", "https://cdn.jsdelivr.net"],
         },
     }
 
     # Logging
     APP_LOG_ENABLED = True
-    APP_LOG_DIR = os.path.join(deployment_dir, "logs")
+    APP_LOG_DIR = "/var/logs/programming_quiz_web_app"
     APP_LOG_FILE_NAME = "programming_quiz.log"
     APP_LOG_FILE_MAX_BYTES = 51200  # 50KiB
     APP_LOG_FILE_BACKUP_COUNT = 10
