@@ -37,7 +37,7 @@ def register():
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     """This is the endpoint for the login page."""
-    
+
     form = LoginForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
@@ -56,5 +56,5 @@ def login():
             return redirect(url_for('main.index'))
         else:
             form.password.errors.append('Invalid email or password')
-    
+
     return render_template('auth/login.html', title="Login", form=form)
