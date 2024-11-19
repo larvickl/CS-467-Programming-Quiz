@@ -12,3 +12,9 @@ def index():
 def robots():
     """Return a robots.txt file from the application root directory."""
     return send_from_directory("static", "robots.txt")
+
+@bp.route('/quiz/available')
+def available_quizzes():
+    """This is the endpoint for the available quizzes."""
+    quizzes = Quizzes.query.all()
+    return render_template('applicant/landing.html', title="Quizzes")
