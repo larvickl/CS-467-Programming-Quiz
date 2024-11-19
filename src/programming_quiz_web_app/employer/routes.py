@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
-from programming_quiz_web_app.employer.forms import QuizDetailsForm
+from programming_quiz_web_app.employer.forms import QuizDetailsForm, AddQuestionForm, QuizSettingsForm
 from programming_quiz_web_app import db
 
 
@@ -101,3 +101,60 @@ def quiz_details():
         return redirect(url_for('employer.dashboard'))  # Redirect to dashboard or next step
     
     return render_template('employer/quiz_settings1.html', form=form, current_year=dt.datetime.now(dt.timezone.utc).year)
+
+
+@bp.route('/quiz/add_items/<int:quiz_id>', methods=['GET', 'POST'])
+def add_items(quiz_id):
+    """Route to add/edit items for a specific quiz"""
+
+    form = AddQuestionForm()
+    
+    # Fetch quiz data
+    quiz = Quizzes.query.get(quiz_id)
+
+    if not quiz:
+        flash('Quiz not found. Displaying dummy data.', 'warning')
+
+        # dummy data
+        quiz_title = 'Sample Quiz Title'
+        questions = []
+
+    
+    # Minimal form handling
+    if form.validate_on_submit():
+        # Placeholder: Flash a success message
+        flash('Form submitted successfully!', 'success')
+        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+    
+    # Prepare context data with dummy or fetched data
+    context = {
+        'quiz_title': quiz_title,
+        'questions': questions,
+        'form': form,
+        'progress_percentage': 58,  # Static value; adjust as needed
+        'current_year': dt.datetime.now().year
+    }
+        
+    return render_template('employer/quiz_settings2.html', **context)
+
+@bp.route('/quiz/quiz_settings/<int:quiz_id>', methods=['GET', 'POST'])
+def quiz_settings(quiz_id):
+    quiz = Quizzes.query.get(quiz_id)
+
+    if not quiz:
+        flash('Quiz not found. Displaying dummy data.', 'warning')
+
+    form = QuizSettingsForm()
+
+    if form.validate_on_submit():
+        # Update quiz settings with form data
+        quiz.time_limit = form.time_limit.data
+        quiz.start_date = form.start_date.data
+        quiz.end_date = form.end_date.data
+        quiz.randomize = form.randomize.data
+
+    return render_template(
+        'employer/quiz_settings3.html',
+        form=form,
+        quiz_id=quiz_id
+    )

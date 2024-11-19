@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField
+from wtforms import StringField, SelectField, TextAreaField, RadioField, DateField, SubmitField
 from wtforms.validators import DataRequired, Length
 from wtforms import ValidationError
 from programming_quiz_web_app.models import Quizzes 
@@ -72,3 +72,77 @@ class QuizDetailsForm(FlaskForm):
         existing_quiz = Quizzes.query.filter_by(name=quiz_title.data).first()
         if existing_quiz:
             raise ValidationError('A quiz with this title already exists. Please choose a different title.')
+
+class AddQuestionForm(FlaskForm):
+    """Form for adding a new question to a quiz.
+    
+    Attributes
+    ----------
+    question_type: StringField
+        The type of question being added.
+    question_body : TextAreaField
+        The content of the question.
+    submit : SubmitField
+        Form submission button labeled 'Add Question'.
+    """
+    question_type = SelectField(
+        'Question Type',
+        choices=[
+            ('true-false', 'True/False'),
+            ('free-form', 'Free-Form'),
+            ('multiple-choice', 'Multiple Choice'),
+            ('code-snippet', 'Code Snippet')
+        ],
+        validators=[DataRequired()],
+    )
+    question_body = TextAreaField(
+        'Question Body',
+        validators=[
+            DataRequired(), 
+            Length(
+                min=10, 
+                max=2999,
+                message="Question body must be between 10 and 3000 characters.")],
+        render_kw={"placeholder": "Enter your question"}
+    )
+    submit = SubmitField('Add Question')
+
+
+class QuizSettingsForm(FlaskForm):
+    """
+    Form for configuring quiz settings.
+    
+    Attributes
+    ----------
+    time_limit : SelectField
+        The time limit for the quiz.
+    start_date : DateField
+        The start date when the quiz becomes available.
+    end_date : DateField
+        The end date when the quiz is no longer available.
+    randomize : RadioField
+        Option to randomize the order of questions.
+    submit : SubmitField
+        Form submission button labeled 'Publish'.
+    """
+    time_limit = SelectField('Time limit', choices=[
+        ('', 'Select the time limit'),
+        ('30', '30 minutes'),
+        ('60', '1 hour'),
+        ('90', '1.5 hours'),
+        ('120', '2 hours'),
+        ('unlimited', 'Unlimited')
+        ], 
+        validators=[DataRequired()])
+
+    start_date = DateField('Start date', format='%Y-%m-%d', validators=[DataRequired()])
+    end_date = DateField('End date', format='%Y-%m-%d', validators=[DataRequired()])
+
+    randomize = RadioField('Randomize questions?', choices=[
+        ('yes', 'Yes'),
+        ('no', 'No')
+        ], 
+        default='no', 
+        validators=[DataRequired()])
+
+    submit = SubmitField('Publish')
