@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from logging.handlers import RotatingFileHandler
+from seed_data import run_seed
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -39,6 +40,9 @@ def create_app(app_config: Any) -> Flask:
     # Initialize the database.
     db.init_app(app)
     migrate.init_app(app, db, directory=os.path.join(os.path.abspath(os.path.dirname(__file__)), "migrations"))
+
+    # Add in the seed data.
+    run_seed()
 
     # Register Blueprints
     from programming_quiz_web_app.main import bp as main_bp
