@@ -29,7 +29,7 @@ Quizzes
                     <tr>
                         <td>{{ quiz.id }}</td>
                         <td>{{ quiz.name }}</td>
-                        <td>{{ quiz.default_time_limit_seconds }} mins</td>
+                        <td>{{ quiz.default_time_limit_seconds }}</td>
                         <td><a href="{{ url_for('start_quiz', quiz_id=quiz.id) }}" class="action-link">Start Quiz</a></td>
                     </tr>
                     {% endfor %}
