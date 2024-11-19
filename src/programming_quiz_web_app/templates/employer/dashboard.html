@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Employer Dashboard
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbars/navbar2.html' %}
+{% endblock %}
+
+{% block app_content %}
+<div class="dashboard-container">
+    <!-- main row: recent activity sidebar, main content -->
+    <div class="row main-row">
+        <!-- recent activity sidebar -->
+        <div class="col-md-5">
+            <div class="recent-activity">
+                <h5>Recent Activity</h5>
+                <ul class="list-unstyled">
+                    {% for activity in recent_activities %}
+                        <li>{{ activity.description }} ({{ activity.time_ago }})</li>
+                    {% else %}
+                        <li>No recent activity.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- main content section -->
+        <div class="col-md-7">
+            <!-- Button Row -->
+            <div class="btn-container">
+                <a href="#" class="btn btn-outline-secondary">Create new quiz</a> 
+                <a href="#" class="btn btn-outline-secondary">Add Applicant</a> 
+                <form class="d-inline" method="get" action="#">
+                    <input type="text" class="form-control" name="query" placeholder="Search Applicant">
+                </form>
+            </div>
+
+            <!-- stats bar -->
+            <div class="stats-bar">
+                <span>Quizzes created: {{ stats.quizzes_created }}</span>
+                <span>Active: {{ stats.active_quizzes }}</span>
+                <span>Pending: {{ stats.pending_quizzes }}</span>
+                <span>Applicants added: {{ stats.applicants_added }}</span>
+            </div>
+
+            <!-- Quizzes section -->
+            <h4 class="mt-4">Quizzes</h4>
+            <table class="table table-hover mb-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Quiz Name</th>
+                        <th scope="col">Sent</th>
+                        <th scope="col">Takers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                        <tr>
+                            <td><a href="#">{{ quiz.name }}</a></td>
+                            <td>{{ quiz.sent }}</td>
+                            <td>{{ quiz.takers }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No quizzes available.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- applicants section -->
+            <h4>Applicants</h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Assigned Quizzes</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for applicant in applicants %}
+                        <tr>
+                            <td>{{ applicant.given_name }} {{ applicant.surname }}</td>
+                            <td>{{ applicant.email }}</td>
+                            <td class="assigned-quizzes">
+                                {% for assignment in applicant.assignments %}
+                                    <a href="#">{{ assignment.quiz.name }}</a>{% if not loop.last %}, {% endif %}
+                                {% else %}
+                                    None
+                                {% endfor %}
+                            </td>
+                            <td class="actions-cell">
+                                <a href="#">View</a> 
+                                <a href="#" class="action-link">Edit</a>
+                                <a href="#" class="action-link">Delete</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No applicants found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

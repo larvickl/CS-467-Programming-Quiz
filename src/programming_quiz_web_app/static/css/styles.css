@@ -19,3 +19,74 @@
     background-color: #000;
     color: white;
 }
+.navbar-custom {
+    background: #2a0000;
+}
+.navbar-custom .nav-link,
+.navbar-custom .navbar-brand,
+.navbar-custom .btn {
+    color: white !important;
+}
+.navbar-custom .nav-link:hover,
+.navbar-custom .navbar-brand:hover {
+    color: #f0f0f0 !important; /* Optional: lighter shade for hover effect */
+}
+.dashboard-container {
+    padding: 20px;
+}
+.recent-activity {
+    background: #e9ecef;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.recent-activity li {
+    margin-bottom: 12px;  /* Increased spacing between activity items */
+}
+.btn-container {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+.btn-container .btn {
+    flex: 1;
+}
+.btn-container .form-control {
+    flex: 2;
+}
+.stats-bar {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.stats-bar span {
+    margin-right: 20px;
+    font-weight: 500;
+}
+.action-link {
+    color: #212529;
+    text-decoration: none;
+    margin-right: 15px;
+}
+.action-link:hover {
+    text-decoration: underline;
+}
+.table a {
+    color: #212529;
+    text-decoration: none;
+}
+.table a:hover {
+    text-decoration: underline;
+}
+.main-row {
+    margin-top: 20px;
+}
+.assigned-quizzes {
+    word-wrap: break-word;
+    max-width: 200px;  /* Adjust this value based on your needs */
+}
+.actions-cell {
+    white-space: nowrap;  /* Keeps actions on one line */
+}
