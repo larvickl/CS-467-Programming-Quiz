@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from programming_quiz_web_app.auth.forms import RegistrationValidator, LoginForm
 from programming_quiz_web_app import db
 from programming_quiz_web_app.models import Users
+from flask_jwt_extended import create_access_token
 import datetime as dt
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -41,8 +42,19 @@ def login():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password_hash, form.password.data):
+            # Generate a new JWT token.
+            token = create_access_token(identity={"id": user.id, "email": user.email})
+            try:
+                # Store the token in the database.
+                user.token = token
+                user.last_login = dt.datetime.now(dt.timezone.utc)
+                db.session.commit()
+            except:
+                db.session.rollback()
+                flash('Failed to store token. Please try again.', 'danger')
+                return redirect(url_for('auth.login'))
             return redirect(url_for('main.index'))
         else:
             form.password.errors.append('Invalid email or password')
-
+    
     return render_template('auth/login.html', title="Login", form=form)
