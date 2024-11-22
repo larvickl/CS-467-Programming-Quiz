@@ -21,19 +21,11 @@ def dashboard():
         })
 
     # Fetch applicants
-    recent_applicants = Applicants.query.order_by(Applicants.id.desc()).all()
+    recent_applicants = Applicants.query.order_by(Applicants.id.desc()).limit(8).all()
     for applicant in recent_applicants:
         recent_activities.append({
             'description': f"Candidate {applicant.given_name} {applicant.surname} added...",
-            'timestamp': applicant.id  # using ID as a proxy for time?
         })
-
-    # Sort all recent activities by timestamp descending
-    recent_activities_sorted = sorted(
-        recent_activities,
-        key=lambda x: x['timestamp'],
-        reverse=True
-    )
 
     # Fetch all quizzes
     quizzes = Quizzes.query.all()
@@ -70,7 +62,7 @@ def dashboard():
     return render_template(
         'employer/dashboard.html',
         title="Employer Dashboard",
-        recent_activities=recent_activities_sorted,
+        recent_activities=recent_activities,
         quizzes=quizzes,
         applicants=applicants,
         stats=stats

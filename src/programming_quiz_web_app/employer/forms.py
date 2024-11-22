@@ -101,7 +101,7 @@ class AddQuestionForm(FlaskForm):
             DataRequired(), 
             Length(
                 min=10, 
-                max=2999,
+                max=4194303,
                 message="Question body must be between 10 and 3000 characters.")],
         render_kw={"placeholder": "Enter your question"}
     )
