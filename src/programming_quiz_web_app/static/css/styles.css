@@ -4,6 +4,8 @@ html, body {
     display: flex;
     flex-direction: column;
 }
+
+/* Existing login styles */
 .login-container {
     max-width: 400px;
     margin: 50px auto;
@@ -13,53 +15,71 @@ html, body {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+/* Existing hero section */
 .hero {
     background: linear-gradient(to right, #3b0000, #1a0000);
     color: white;
     padding: 60px 0;
 }
+
 .hero-content {
     text-align: left;
 }
+
+/* Existing button styles */
 .btn-custom {
     background-color: #000;
     color: white;
 }
+
+/* Existing navbar styles */
 .navbar-custom {
     background: #2a0000;
 }
+
 .navbar-custom .nav-link,
 .navbar-custom .navbar-brand,
 .navbar-custom .btn {
     color: white !important;
 }
+
 .navbar-custom .nav-link:hover,
 .navbar-custom .navbar-brand:hover {
-    color: #f0f0f0 !important; /* Optional: lighter shade for hover effect */
+    color: #f0f0f0 !important;
 }
+
+/* Existing dashboard styles */
 .dashboard-container {
     padding: 20px;
 }
+
 .recent-activity {
     background: #e9ecef;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
+
 .recent-activity li {
-    margin-bottom: 12px;  /* Increased spacing between activity items */
+    margin-bottom: 12px;
 }
+
 .btn-container {
     margin-bottom: 20px;
     display: flex;
     gap: 10px;
 }
+
 .btn-container .btn {
     flex: 1;
 }
+
 .btn-container .form-control {
     flex: 2;
 }
+
+/* Existing stats styles */
 .stats-bar {
     background: #e9ecef;
     padding: 15px;
@@ -67,80 +87,87 @@ html, body {
     margin-bottom: 20px;
     text-align: center;
 }
+
 .stats-bar span {
     margin-right: 20px;
     font-weight: 500;
 }
+
+/* Existing link styles */
 .action-link {
     color: #212529;
     text-decoration: none;
     margin-right: 15px;
 }
+
 .action-link:hover {
     text-decoration: underline;
 }
+
+/* Existing table styles */
 .table a {
     color: #212529;
     text-decoration: none;
 }
+
 .table a:hover {
     text-decoration: underline;
 }
+
 .main-row {
     margin-top: 20px;
 }
+
 .assigned-quizzes {
     word-wrap: break-word;
     max-width: 200px;  
 }
+
 .actions-cell {
-    white-space: nowrap;  /* Keeps actions on one line */
+    white-space: nowrap;
 }
-/* Quiz Details */
+
+/* Existing content container styles */
 .content-container {
     flex: 1;
     padding: 40px;
 }
+
 .content-container-add-items {
     padding-top: 40px;
     padding-left: 0;
-    padding-right: 40px; /* Added to match .main-content padding */
+    padding-right: 40px;
 }
-/* Progress bar */
+
+/* Existing progress bar styles */
 .progress {
     height: 20px;
     background-color: #e9ecef;
 }
 
-.progress-bar {
-    background-color: #1a0000;
-    height: 100%;
-    min-height: 20px;
-    min-width: 19% !important;
-}
-.progress-bar-p2 {
-    background-color: #1a0000;
-    height: 100%;
-    min-height: 20px;
-    min-width: 58% !important;
-}
+.progress-bar,
+.progress-bar-p2,
 .progress-bar-p3 {
     background-color: #1a0000;
     height: 100%;
     min-height: 20px;
-    min-width: 88% !important;
 }
-/* Buttons */
+
+.progress-bar { min-width: 19% !important; }
+.progress-bar-p2 { min-width: 58% !important; }
+.progress-bar-p3 { min-width: 88% !important; }
+
+/* Existing button styles */
 .btn-dark {
     background-color: black;
     color: white;
 }
 
 .btn-dark:hover {
-    background-color: #333333; /* Optional: Darker shade on hover */
+    background-color: #333333;
 }
 
-/* Divider */
+/* Existing divider styles */
 .or-divider {
     margin: 5px 0 11px 5px;
     font-size: 1.2rem;
@@ -148,29 +175,35 @@ html, body {
     text-align: left;
 }
 
-/* Textarea */
+/* Existing textarea styles */
 .textarea-large {
     height: 150px;
 }
 
-/* Button Row */
+/* Existing button row styles */
 .btn-row {
     margin-top: 60px;
     margin-bottom: 90px;
 }
 
-/* Extra Spacing */
+/* Existing spacing styles */
 .extra-spacing {
     margin-bottom: 40px;
 }
 
-/* Sidebar */
+/* Existing sidebar styles */
 .sidebar {
     border-right: 1px solid #dee2e6;
     height: 100%;
     padding-right: 40px;
-    position: relative; /* Ensures absolute positioning of buttons */
+    position: relative;
     min-height: 650px;
+    background-color: #f8f9fa;
+
+}
+.sidebar-interface {
+    margin-top: 20px;
+
 }
 
 .sidebar-content {
@@ -184,54 +217,88 @@ html, body {
 .sidebar-buttons {
     position: absolute;
     bottom: 80px;
-    margin-top: auto;  /* Pushes buttons to the bottom */
-    padding-bottom: 3px; /* Fine-tune alignment */
+    margin-top: auto;
+    padding-bottom: 3px;
     display: flex;
     justify-content: space-between;
     gap: 15px;
 }
+.sidebar h5 {
+    padding-top: 20px; 
+}
 
-/* Main Content */
+/* Main content styles */
 .main-content {
     padding-left: 40px;
     padding-right: 40px;
 }
 
-/* Ensure list-group-item uses flexbox for alignment */
+/* Existing list group styles */
 .list-group-item {
     display: flex;
     align-items: center;
-    padding: 10px; /* Adjust padding as needed */
+    padding: 10px;
 }
 
-/* Style radio buttons */
 .form-check-input {
-    margin-top: 0; 
+    margin-top: 0;
     margin-right: 10px;
     cursor: pointer;
     width: 1.25rem;
     height: 1.25rem;
 }
 
-/* Style labels */
 .list-group-item label {
     flex-grow: 1;
     cursor: pointer;
-    margin-bottom: 0; /* Remove default margin */
+    margin-bottom: 0;
     font-size: 1rem;
 }
 
-/* Optional: Style badges if used */
 #question-list .badge {
-    margin-left: auto; /* Push badges to the far right */
+    margin-left: auto;
     font-size: 0.85rem;
 }
-.action-link {
-    color: #212529;
-    text-decoration: none;
-    margin-right: 15px;
+
+/* New Quiz Interface Styles */
+.question-box {
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    height: 300px;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.action-link:hover {
+.timer {
+    text-align: right;
+    font-weight: bold;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.pagination {
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.pagination .page-item .page-link {
+    color: black;
+    text-decoration: none;
+}
+
+.pagination .page-item .page-link:hover {
     text-decoration: underline;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: black;
+    color: white;
+    border: none;
 }
