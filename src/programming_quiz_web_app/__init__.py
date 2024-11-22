@@ -1,34 +1,64 @@
 import os
 import logging
-from typing import Any
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from logging.handlers import RotatingFileHandler
+from programming_quiz_web_app.default_config import App_Config
 
 db = SQLAlchemy()
 migrate = Migrate()
 talisman = Talisman()
 csrf = CSRFProtect()
 
-def create_app(app_config: Any) -> Flask:
+def create_app(app_config_env_var: str = "FLASK_APP_CONFIG", app_config_prefix: str = "SPQ_CONFIG") -> Flask:
     """Create a flask application.
 
     Parameters
     ----------
-    app_config : Any
-        The class used to configure the Flask application.
+    app_config_env_var : str, optional
+        The environmental variable containing the path to a python config file.
+        All variables in such a config file that consist of only capital letters and
+        underscores will be added to the flask config.  If the environmental variable
+        given is not set, no config file will be loaded. By default "FLASK_APP_CONFIG"
+    app_config_prefix : str, optional
+        All environmental variables prefixed with this string will be added to the
+        Flask configuration.  The prefix is removed before adding to the Flask config. 
+        Note that if the same configuration setting is set by both a "app_config_env_var" 
+        config file and a "app_config_prefix", the setting from the config file will take 
+        precedence.  By default "SPQ_CONFIG"
 
     Returns
     -------
     Flask
-        The Flask application.
+        The flask application.
+
+    Raises
+    ------
+    KeyError
+        If a required configuration variable is not set (i.e., "SECRET_KEY" 
+        or "SQLALCHEMY_DATABASE_URI").
+    ValueError
+        If a required configuration variable is in the application configuration
+        but has a value of None.
     """
     # Create Flask app.
     app = Flask(__name__)
-    app.config.from_object(app_config)
+
+    # Apply configuration.
+    app.config.from_object(App_Config)  # Apply default config.
+    app.config.from_prefixed_env(prefix=app_config_prefix)  # Apply config from environmental variables.
+    if os.environ.get(app_config_env_var) is not None:
+        app.config.from_envvar(app_config_env_var)  # Apply configuration from config file pointed to by env var.
+
+    # Check configuration for required keys not included in default_config.
+    for required_key in ["SECRET_KEY", "SQLALCHEMY_DATABASE_URI"]:
+        if required_key not in app.config.keys():
+            raise KeyError(f"{required_key} must be defined in the application configuration!")
+        if app.config[required_key] is None:
+            raise ValueError(f"{required_key} must not be None!")
 
     # Initialize Flask-Talisman
     talisman.init_app(app, **app.config["FLASK_TALISMAN_CONFIG"])
