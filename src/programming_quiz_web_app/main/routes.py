@@ -13,6 +13,11 @@ def robots():
     """Return a robots.txt file from the application root directory."""
     return send_from_directory("static", "robots.txt")
 
+@bp.route('/vite')
+def vite_example():
+    """This is the endpoint for the vite example."""
+    return render_template('main/vite_example.html', title="Vite Example")
+    
 @bp.route('/quiz/start', methods=['GET', 'POST'])
 def confirm_start_quiz():
     """Endpoint for the Applicant confirmation prior to starting quiz."""
@@ -35,7 +40,6 @@ def confirm_start_quiz():
             return redirect(url_for('main.index'))
     
     return render_template('applicant/confirm_start.html', quiz=quiz)
-
 
 @bp.route('/quiz/submit', methods=['GET', 'POST'])
 def confirm_submit_quiz():

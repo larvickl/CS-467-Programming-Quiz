@@ -80,6 +80,9 @@ def create_app(app_config_env_var: str = "FLASK_APP_CONFIG", app_config_prefix: 
     from programming_quiz_web_app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
+    from programming_quiz_web_app.vite import bp as vite_bp
+    app.register_blueprint(vite_bp)
+
     # Setup Logger.
     if app.config["APP_LOG_ENABLED"] is True and not app.debug:
         log_file_dir = app.config["APP_LOG_DIR"]
