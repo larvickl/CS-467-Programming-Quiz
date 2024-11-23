@@ -1,0 +1,18 @@
+{
+  "assets/react.svg": {
+    "file": "bundled/react-CHdo91hT.svg",
+    "src": "assets/react.svg"
+  },
+  "main.tsx": {
+    "file": "bundled/main-BN0G2WH_.js",
+    "name": "main",
+    "src": "main.tsx",
+    "isEntry": true,
+    "css": [
+      "bundled/main-C8VFZ7bc.css"
+    ],
+    "assets": [
+      "bundled/react-CHdo91hT.svg"
+    ]
+  }
+}

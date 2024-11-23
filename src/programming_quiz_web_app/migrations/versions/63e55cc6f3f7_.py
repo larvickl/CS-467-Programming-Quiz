@@ -88,7 +88,7 @@ def upgrade():
     sa.Column('start_time', programming_quiz_web_app.models.TZDateTime(), nullable=True),
     sa.Column('submit_time', programming_quiz_web_app.models.TZDateTime(), nullable=True),
     sa.Column('score', sa.Double(), nullable=True),
-    sa.Column('url', mysql.TEXT(), nullable=True),
+    sa.Column('url', sa.String(length=191), nullable=True),
     sa.Column('url_pin', sa.String(length=10), nullable=True),
     sa.Column('assigned_by_id', sa.Integer(), nullable=False),
     sa.Column('quiz_id', sa.Integer(), nullable=False),
