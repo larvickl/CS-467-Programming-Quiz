@@ -51,3 +51,7 @@ class App_Config:
     SMTP_PASSWORD = "example"
     SMTP_FROM = Address("SPQ NO REPLY", "noreply", "example.com")
     CONTACT_EMAIL_ADDRESS = "example@example.com"
+
+    # Vite Config.
+    VITE_MODE = "production"
+    VITE_ORIGIN = "http://localhost:5173"

@@ -13,6 +13,11 @@ def robots():
     """Return a robots.txt file from the application root directory."""
     return send_from_directory("static", "robots.txt")
 
+@bp.route('/vite')
+def vite_example():
+    """This is the endpoint for the vite example."""
+    return render_template('main/vite_example.html', title="Vite Example")
+    
 @bp.route('/quiz/start', methods=['GET', 'POST'])
 def confirm_start_quiz():
     """Endpoint for the Applicant confirmation prior to starting quiz."""
@@ -35,7 +40,6 @@ def confirm_start_quiz():
             return redirect(url_for('main.index'))
     
     return render_template('applicant/confirm_start.html', quiz=quiz)
-
 
 @bp.route('/quiz/submit', methods=['GET', 'POST'])
 def confirm_submit_quiz():
@@ -63,3 +67,52 @@ def confirm_submit_quiz():
             return redirect(url_for('applicant/take_quiz.html', quiz_id=quiz_id))
     
     return render_template('applicant/confirm_submit.html', quiz=quiz)
+
+@bp.route('/quiz/available')
+def available_quizzes():
+    """This is the endpoint for the available quizzes."""
+    quizzes = Quizzes.query.all()
+    return render_template('applicant/landing.html', title="Quizzes")
+
+@bp.route('/quiz/test')
+def test_quiz():
+    """Test route to render quiz_interface.html with static data for front-end testing."""
+    
+    # Static/mock data for testing
+    instructions = "Please read the following question carefully and select the best answer."
+    remaining_time = 45  # in minutes
+    current_question_number = 1
+    total_questions = 3  # example number
+    
+    current_question = {
+        'id': 1,
+        'content': 'What language is the app "Software Programming Quiz" programmed in?',
+        'answers': [
+            {'id': 'A', 'text': 'Java'},
+            {'id': 'B', 'text': 'Python'},
+            {'id': 'C', 'text': 'C++'},
+            {'id': 'D', 'text': 'C#'},
+        ]
+    }
+    
+    selected_answer = None  # No answer selected initially
+    
+    has_previous = False  # First question, no previous
+    has_next = True       # There are more questions
+    
+    pagination_pages = [1, 2, 3]
+    
+    return render_template(
+        'applicant/quiz_interface.html',
+        title="Quiz in Progress",
+        instructions=instructions,
+        remaining_time=remaining_time,
+        current_question_number=current_question_number,
+        total_questions=total_questions,
+        current_question=current_question,
+        selected_answer=selected_answer,
+        has_previous=has_previous,
+        has_next=has_next,
+        pagination_pages=pagination_pages
+    )
+

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quizzes
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbars/navbar2.html' %}
+{% endblock %}
+
+{% block app_content %}
+    <div class="content-container container ms-10">
+        <h2 class="text-start">Welcome, {{ user_name }}!</h2> <!--user.given_name-->
+        <p class="text-start">Here are the quizzes available for you to take.<br>Select a quiz to get started.</p>
+
+        <!-- Quizzes Table -->
+        <div class="quiz-table">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Quiz</th>
+                        <th>Name</th>
+                        <th>Time Limit</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.id }}</td>
+                        <td>{{ quiz.name }}</td>
+                        <td>{{ quiz.default_time_limit_seconds }}</td>
+                        <td><a href="{{ url_for('start_quiz', quiz_id=quiz.id) }}" class="action-link">Start Quiz</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

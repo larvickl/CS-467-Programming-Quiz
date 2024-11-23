@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz in Progress
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbars/navbar2.html' %}
+{% endblock %}
+
+{% block app_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Instructions Sidebar -->
+            <div class="col-md-3 sidebar sidebar-interface">
+                <h5>Instructions</h5>
+                <p>
+                    {{ instructions }}
+                </p>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="col-md-9 main-content">
+                <!-- Timer -->
+                <div class="row">
+                    <div class="col-12 timer">
+                        {{ remaining_time }} mins remaining
+                    </div>
+                </div>
+
+                <!-- Current Question -->
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Question {{ current_question_number }}</h4> <!-- of {{ total_questions }} -->
+                        <div class="question-box">
+                            <!-- Display Question Content -->
+                            <span>{{ current_question.content }}</span>
+                        </div>
+
+                        <!-- Answers Form -->
+                        <form method="POST" action="#">
+                            {% for answer in current_question.answers %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer" id="answer{{ loop.index }}" value="{{ answer.id }}"
+                                        {% if selected_answer == answer.id %} checked {% endif %}>
+                                    <label class="form-check-label" for="answer{{ loop.index }}">
+                                        {{ answer.text }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            <input type="hidden" name="question_id" value="{{ current_question.id }}">
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12 navigation-buttons">
+                        {% if has_previous %}
+                            <a href="#" class="btn btn-dark prev">Previous</a>
+                        {% else %}
+                            <button class="btn btn-dark prev" disabled>Previous</button>
+                        {% endif %}
+
+                        {% if has_next %}
+                            <a href="#" class="btn btn-dark next">Next</a>
+                        {% else %}
+                            <a href="{{ url_for('main.confirm_submit_quiz') }}" class="btn btn-dark next">Submit</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row">
+                    <div class="col-12">
+                        <nav>
+                            <ul class="pagination">
+                                {% for page in pagination_pages %}
+                                    <li class="page-item {% if page == current_question_number %}active{% endif %}">
+                                        <a class="page-link" href="#">{{ page }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('main.confirm_submit_quiz') }}">Submit</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
