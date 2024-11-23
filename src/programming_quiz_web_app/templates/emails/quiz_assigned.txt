@@ -1,0 +1,27 @@
+Quiz Assigned!
+==============
+
+{{quiz_name}}
+{{ "-" * quiz_name|length }}
+* Due:  {{due_datetime_string}}
+* Allowed Time: {{allowed_time}} 
+* Quiz PIN: {{quiz_pin}} 
+* Assigned By: {{assigned_by_name}} ({{assigned_by_email}})
+
+Instructions:
+-------------
+1. Click the "Start Quiz" button below.
+2. Enter your PIN when prompted.
+
+Important Notes:
+----------------
+* You MUST complete the quiz in one sitting.
+* Do not close your browser window or navigate away from the quiz until you have submitted the quiz.
+* The quiz must be submitted (not just started) by the due date listed above.
+* Please do not reply to this email.
+
+Start Quiz URL:
+---------------
+{{quiz_url}}
+
+Service Questions? Email {{contact_email}}

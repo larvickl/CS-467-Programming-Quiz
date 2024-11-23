@@ -1,4 +1,5 @@
 import datetime as dt
+from email.headerregistry import Address
 
 class App_Config:
     # Flask Config
@@ -41,6 +42,15 @@ class App_Config:
     APP_LOG_FILE_NAME = "programming_quiz.log"
     APP_LOG_FILE_MAX_BYTES = 51200  # 50KiB
     APP_LOG_FILE_BACKUP_COUNT = 10
+
+    # SMTP config.
+    SMTP_SERVER = "smtp.example.com"
+    SMTP_PORT = 465
+    SMTP_SSL = True
+    SMTP_USERNAME = "example"
+    SMTP_PASSWORD = "example"
+    SMTP_FROM = Address("SPQ NO REPLY", "noreply", "example.com")
+    CONTACT_EMAIL_ADDRESS = "example@example.com"
 
     # Vite Config.
     VITE_MODE = "production"
