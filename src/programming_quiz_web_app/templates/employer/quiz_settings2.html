@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz Editor
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbars/navbar2.html' %}
+{% endblock %}
+
+{% block app_content %}
+    <!-- Main Content -->
+    <div class="container content-container-add-items">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-4 sidebar">
+                <div>
+                    <h5 class="fw-bold" id="quiz-title">{{ quiz_title }}</h5>
+                    <ul class="list-group" id="question-list">
+                        {% for question in questions %}
+                            <li class="list-group-item d-flex align-items-center">
+                                <input type="radio" name="question" id="question{{ question.id }}" class="form-check-input me-2">
+                                <label for="question{{ question.id }}" class="flex-grow-1">
+                                    {{ question.body }}
+                                </label>
+                                {% if question.type == 'multiple-choice' %}
+                                    <span class="badge bg-primary ms-auto">Multiple Choice</span>
+                                {% elif question.type == 'true-false' %}
+                                    <span class="badge bg-secondary ms-auto">True/False</span>
+                                {% elif question.type == 'free-form' %}
+                                    <span class="badge bg-success ms-auto">Free-Form</span>
+                                {% elif question.type == 'code-snippet' %}
+                                    <span class="badge bg-warning ms-auto">Code Snippet</span>
+                                {% endif %}
+                            </li>
+                        {% else %}
+                            <li class="list-group-item">No questions added yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="sidebar-buttons mt-auto">
+                    <button class="action-link" id="edit-btn">Edit item</button>
+                    <button class="action-link" id="remove-btn">Remove item</button>
+                </div>
+            </div>
+
+            <!-- Main Editor -->
+            <div class="col-md-8 main-content">
+                <!-- Progress Bar -->
+                <div class="progress mb-4">
+                    <div class="progress-bar-p2" style="width: 58%;" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <h3 class="mb-4">Step 2: Add Questions</h3>
+                <a href="#" class="btn btn-dark mb-2">Select from question bank</a>
+
+                <!-- Divider -->
+                <div class="or-divider">or</div>
+
+                <!-- Add New Question -->
+                <h5 class="fw-bold mb-4">Add new question</h5>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Question Type -->
+                    <div class="form-group mb-4">
+                        {{ form.question_type.label(class="form-label fw-bold") }}
+                        {{ form.question_type(class="form-select", id="question-type") }}
+                        {% if form.question_type.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.question_type.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Question Body -->
+                    <div class="form-group mb-4">
+                        {{ form.question_body.label(class="form-label fw-bold") }}
+                        {{ form.question_body(class="form-control textarea-large mb-3", id="question-body", placeholder="Enter your question") }}
+                        {% if form.question_body.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.question_body.errors[0] }}
+                            </div>
+                        {% endif %}
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-dark" id="add-question-btn">Add question</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Extra Spacing -->
+                <div class="extra-spacing"></div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between btn-row">
+                    <a href="#" class="btn btn-dark">Previous</a>
+                    <a href="#" class="btn btn-dark">Next</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
