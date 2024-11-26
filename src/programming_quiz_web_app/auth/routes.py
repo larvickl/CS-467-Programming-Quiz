@@ -41,7 +41,7 @@ def login():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password_hash, form.password.data):
-            return redirect(url_for('main.index'))
+            return redirect(url_for('employer.dashboard'))
         else:
             form.password.errors.append('Invalid email or password')
 
