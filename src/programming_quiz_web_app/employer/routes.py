@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
@@ -74,24 +74,23 @@ def quiz_details():
     """Route to display and handle the Quiz Details form."""
     form = QuizDetailsForm()
     if form.validate_on_submit():
-        # Extract form data
-        quiz_title = form.quiz_title.data
-        job_title = form.job_title.data
-        language = form.language.data
-        
         # Create a new quiz instance
+        #TODO:  Add the actual user id to created_by_id.
         new_quiz = Quizzes(
-            name=quiz_title,
-            job_title=job_title,
-            language=language,
-            time_created=dt.datetime.now(dt.timezone.utc)
-        )
-        db.session.add(new_quiz)
-        db.session.commit()
-        
-        flash('Quiz details saved successfully!', 'success')
-        return redirect(url_for('employer.dashboard'))  # Redirect to dashboard or next step
-    
+            name = form.quiz_title.data,
+            description = form.quiz_description.data,
+            default_time_limit_seconds = int(form.default_time_limit_seconds.data),
+            created_by_id = 21)
+        # Commit new quiz to the database.
+        try:
+            db.session.add(new_quiz)
+            db.session.commit()
+            flash('Quiz saved successfully!', 'success')
+            return redirect(url_for('employer.add_items', quiz_id=new_quiz.id))
+        except Exception as the_exception:
+            current_app.logger.exception(the_exception)
+            db.session.rollback()
+            flash('Error creating new quiz!', 'danger')
     return render_template('employer/quiz_settings1.html', form=form, current_year=dt.datetime.now(dt.timezone.utc).year)
 
 
@@ -105,13 +104,9 @@ def add_items(quiz_id):
     quiz = Quizzes.query.get(quiz_id)
 
     if not quiz:
-        flash('Quiz not found. Displaying dummy data.', 'warning')
+        flash('The requested quiz was not found.', 'danger')
+        return redirect(url_for('employer.dashboard'))
 
-        # dummy data
-        quiz_title = 'Sample Quiz Title'
-        questions = []
-
-    
     # Minimal form handling
     if form.validate_on_submit():
         # Placeholder: Flash a success message
@@ -120,8 +115,9 @@ def add_items(quiz_id):
     
     # Prepare context data with dummy or fetched data
     context = {
-        'quiz_title': quiz_title,
-        'questions': questions,
+        'quiz_title': quiz.name,
+        'questions': quiz.free_response_questions,
+        'free_response_questions': quiz.free_response_questions,
         'form': form,
         'progress_percentage': 58,  # Static value; adjust as needed
         'current_year': dt.datetime.now().year

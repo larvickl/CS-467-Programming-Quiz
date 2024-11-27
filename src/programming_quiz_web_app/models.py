@@ -92,7 +92,7 @@ class Quizzes(db.Model):
     name: Mapped[str] = db.mapped_column(db.String(300), unique=True, index=True)
     description: Mapped[Optional[str]] = db.mapped_column(MEDIUMTEXT)
     default_time_limit_seconds: Mapped[int] = db.mapped_column(db.Integer())
-    time_created: Mapped[dt.datetime] = db.mapped_column(TZDateTime, index=True, default=dt.datetime.now(dt.timezone.utc).replace(tzinfo=None))
+    time_created: Mapped[dt.datetime] = db.mapped_column(TZDateTime, index=True, default=dt.datetime.now(dt.timezone.utc))
     # Foreign keys.
     created_by_id: Mapped[int] = db.mapped_column(
         db.Integer(),

@@ -25,7 +25,7 @@ Quiz Details
                     <!-- Quiz Title -->
                     <div class="form-group mb-4">
                         {{ form.quiz_title.label(class="form-label fw-bold") }}
-                        {{ form.quiz_title(class="form-control", placeholder="Enter quiz title") }}
+                        {{ form.quiz_title(class="form-control is-invalid" if form.quiz_title.errors else "form-control", placeholder="Enter quiz title") }}
                         {% if form.quiz_title.errors %}
                             <div class="invalid-feedback d-block">
                                 {{ form.quiz_title.errors[0] }}
@@ -33,24 +33,24 @@ Quiz Details
                         {% endif %}
                     </div>
 
-                    <!-- Job Title -->
+                    <!-- Time Limit -->
                     <div class="form-group mb-4">
-                        {{ form.job_title.label(class="form-label fw-bold") }}
-                        {{ form.job_title(class="form-select") }}
-                        {% if form.job_title.errors %}
+                        {{ form.default_time_limit_seconds.label(class="form-label fw-bold") }}
+                        {{ form.default_time_limit_seconds(class="form-select is-invalid" if form.default_time_limit_seconds.errors else "form-select") }}
+                        {% if form.default_time_limit_seconds.errors %}
                             <div class="invalid-feedback d-block">
-                                {{ form.job_title.errors[0] }}
+                                {{ form.default_time_limit_seconds.errors[0] }}
                             </div>
                         {% endif %}
                     </div>
 
-                    <!-- Programming Language -->
+                    <!-- Description -->
                     <div class="form-group mb-4">
-                        {{ form.language.label(class="form-label fw-bold") }}
-                        {{ form.language(class="form-select") }}
-                        {% if form.language.errors %}
+                        {{ form.quiz_description.label(class="form-label fw-bold") }}
+                        {{ form.quiz_description(class="form-control is-invalid" if form.quiz_description.errors else "form-control") }}
+                        {% if form.quiz_description.errors %}
                             <div class="invalid-feedback d-block">
-                                {{ form.language.errors[0] }}
+                                {{ form.quiz_description.errors[0] }}
                             </div>
                         {% endif %}
                     </div>

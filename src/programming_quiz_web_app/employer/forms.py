@@ -23,37 +23,22 @@ class QuizDetailsForm(FlaskForm):
         'Quiz Title',
         validators=[
             DataRequired(message="Quiz title is required."),
-            Length(
-                min=3, 
-                max=255, 
-                message="Quiz title must be between 3 and 255 characters."
-            )
-        ],
-        render_kw={"placeholder": "Enter quiz title"}
-    )
-    
-    job_title = SelectField(
-        'Job Title',
+            Length(min=3, max=299, message="Quiz title must be between %(min)d  and %(max)d  characters.")],
+        render_kw={"placeholder": "Enter quiz title"})
+    quiz_description = TextAreaField(
+        'Quiz Description', 
+        validators=[
+            Length(min=0, max=4194302, message="Quiz title must be between %(min)d  and %(max)d  characters.")])
+    default_time_limit_seconds = SelectField(
+        'Time limit', 
         choices=[
-            ('', 'Select the job title'),
-            ('Developer', 'Developer'),
-            ('Manager', 'Manager'),
-            ('Analyst', 'Analyst')
-        ],
-        validators=[DataRequired()],
-    )
-    
-    language = SelectField(
-        'Programming Language',
-        choices=[
-            ('', 'Select the quiz language'),
-            ('Python', 'Python'),
-            ('Java', 'Java'),
-            ('JavaScript', 'JavaScript')
-        ],
-        validators=[DataRequired()]
-    )
-    
+            ('', 'Select the time limit'),
+            ('1800', '30 minutes'),
+            ('3600', '1 hour'),
+            ('5400', '1.5 hours'),
+            ('7200', '2 hours'),
+            ('-1', 'Unlimited')], 
+        validators=[DataRequired()])
     submit = SubmitField('Next')
 
     def validate_quiz_title(self, quiz_title):
@@ -101,7 +86,7 @@ class AddQuestionForm(FlaskForm):
             DataRequired(), 
             Length(
                 min=10, 
-                max=4194303,
+                max=4194302,
                 message="Question body must be between 10 and 3000 characters.")],
         render_kw={"placeholder": "Enter your question"}
     )
