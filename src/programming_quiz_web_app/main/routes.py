@@ -1,4 +1,4 @@
-from flask import render_template, send_from_directory, flash, redirect, url_for, request
+from flask import render_template, send_from_directory, flash, redirect, url_for, request, session
 from programming_quiz_web_app.main import bp
 from programming_quiz_web_app.models import *
 
@@ -34,9 +34,80 @@ def confirm_start_quiz():
     
     if quiz_start == "yes":
         flash("Quiz has started. Good luck!", "success")
-        return redirect(url_for('applicant/take_quiz.html', id=quiz.id))
+        return redirect(url_for('main.take_quiz', quiz_id=quiz.id))
     
     return render_template('applicant/confirm_start.html', quiz=quiz)
+
+@bp.route('/quiz/session/<int:quiz_id>', methods=['GET', 'POST'])
+def take_quiz(quiz_id):
+    """Main quiz-taking interface endpoint."""
+    quiz = Quizzes.query.get_or_404(quiz_id)
+
+    # Get all questions and put them in order
+    questions = []
+    questions.extend(quiz.choice_questions)
+    questions.extend(quiz.free_response_questions)
+    questions.sort(key=lambda q: q.order)
+
+    if not questions:
+            return redirect(url_for('main.index'))
+
+    if 'quiz_session' not in session:
+        session['quiz_session'] = {
+            'quiz_id': quiz_id,
+            'current_question': 0,
+            'start_time': dt.datetime.now(dt.timezone.utc).isoformat(),
+            'answers': {}
+        }
+
+    question_number = session['quiz_session']['current_question']
+    current_question = questions[question_number]
+    question_type = 'choice' if isinstance(current_question, ChoiceQuestions) else 'free_response'
+
+    # save answers
+    if request.method == 'POST':
+        answer = request.form.get('answer')
+        current_question_id = request.form.get('question_id')
+        
+        if answer and current_question_id:
+            session['quiz_session']['answers'][str(current_question_id)] = {
+                'answer': answer,
+                'type': question_type
+            }
+            session.modified = True
+
+        # navigate test
+        action = request.form.get('action')
+        if action == 'next' and question_number < len(questions) - 1:
+            session['quiz_session']['current_question'] += 1
+        elif action == 'previous' and question_number > 0:
+            session['quiz_session']['current_question'] -= 1
+            
+        return redirect(url_for('main.take_quiz', quiz_id=quiz_id))
+    
+    # time limit
+    start_time = dt.datetime.fromisoformat(session['quiz_session']['start_time'])
+    elapsed_time = dt.datetime.now(dt.timezone.utc) - start_time
+    remaining_time = quiz.default_time_limit_seconds - int(elapsed_time.total_seconds())
+    
+    if remaining_time <= 0:
+        return redirect(url_for('main.confirm_submit_quiz', id=quiz_id))
+    
+    return render_template(
+        'applicant/quiz_interface.html',
+        quiz=quiz,
+        current_question=current_question,
+        question_type=question_type,
+        current_question_number=question_number + 1,
+        total_questions=len(questions),
+        has_previous=question_number > 0,
+        has_next=question_number < len(questions) - 1,
+        remaining_time=int(remaining_time / 60),
+        selected_answer=session['quiz_session']['answers'].get(str(current_question.id), {}).get('answer'),
+        instructions=quiz.description
+)
+
+
 
 @bp.route('/quiz/submit', methods=['GET', 'POST'])
 def confirm_submit_quiz():
