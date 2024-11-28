@@ -18,10 +18,11 @@ def vite_example():
     """This is the endpoint for the vite example."""
     return render_template('main/vite_example.html', title="Vite Example")
     
-@bp.route('/quiz/start', methods=['GET', 'POST'])
+@bp.route('/quiz/start', methods=['GET'])
 def confirm_start_quiz():
     """Endpoint for the Applicant confirmation prior to starting quiz."""
     quiz_id: int = request.args.get('id', type=int)
+    quiz_start: int = request.args.get('start', "no", type=str)
     if quiz_id is None:
         flash("Quiz ID is missing.", "danger")
         return redirect(url_for('main.index'))
@@ -31,13 +32,11 @@ def confirm_start_quiz():
         flash("Quiz not found.", "danger")
         return redirect(url_for('main.index'))
     
-    if request.method == 'POST':
-        confirm: str = request.form.get('confirm', type=str)
-        if confirm == 'yes':
-            flash("Quiz has started. Good luck!", "success")
-            return redirect(url_for('applicant/take_quiz.html', id=quiz.id))
-        else:
-            return redirect(url_for('main.index'))
+    print(quiz_start)
+
+    if quiz_start == "yes":
+        flash("Quiz has started. Good luck!", "success")
+        return redirect(url_for('applicant/take_quiz.html', id=quiz.id))
     
     return render_template('applicant/confirm_start.html', quiz=quiz)
 
