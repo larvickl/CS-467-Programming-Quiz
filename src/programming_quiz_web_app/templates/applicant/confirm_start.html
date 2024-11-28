@@ -12,11 +12,7 @@ Confirm Start Quiz
         <p>Are you sure you want to start the quiz: {{ quiz.name }}?</p>
         
         <!-- Confirmation -->
-        <form method="POST" action="{{ url_for('main.confirm_start_quiz', id=quiz.id) }}">
-            <input type="hidden" name="confirm" value="yes">
-            <button type="submit" class="btn btn-dark w-100">Yes, Start Quiz</button>
-        </form>
-        
+        <a class="btn btn-dark w-100" href="{{ url_for('main.confirm_start_quiz', id=quiz.id, start='yes') }}" role="button">Yes, Start Quiz</a>
         <!-- Cancel Option -->
         <div class="mt-3">
             <a href="{{ url_for('main.index') }}" class="btn btn-dark w-100">Cancel</a>
