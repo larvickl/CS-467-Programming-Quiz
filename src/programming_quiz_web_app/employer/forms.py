@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, RadioField, DateField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, SelectField, TextAreaField, SubmitField, DecimalField, IntegerField
+from wtforms.validators import DataRequired, Length, NumberRange
 from wtforms import ValidationError
 from programming_quiz_web_app.models import Quizzes 
 
@@ -58,76 +58,96 @@ class QuizDetailsForm(FlaskForm):
         if existing_quiz:
             raise ValidationError('A quiz with this title already exists. Please choose a different title.')
 
-class AddQuestionForm(FlaskForm):
-    """Form for adding a new question to a quiz.
-    
-    Attributes
-    ----------
-    question_type: StringField
-        The type of question being added.
-    question_body : TextAreaField
-        The content of the question.
-    submit : SubmitField
-        Form submission button labeled 'Add Question'.
-    """
-    question_type = SelectField(
-        'Question Type',
-        choices=[
-            ('true-false', 'True/False'),
-            ('free-form', 'Free-Form'),
-            ('multiple-choice', 'Multiple Choice'),
-            ('code-snippet', 'Code Snippet')
-        ],
-        validators=[DataRequired()],
-    )
-    question_body = TextAreaField(
-        'Question Body',
+
+class AddQuestion(FlaskForm):
+    """This class represent a form to add a generic question to the database."""
+    question_title = StringField(
+        'Question Title',
         validators=[
-            DataRequired(), 
-            Length(
-                min=10, 
-                max=4194302,
-                message="Question body must be between 10 and 3000 characters.")],
-        render_kw={"placeholder": "Enter your question"}
-    )
+            DataRequired(message="Question title is required."),
+            Length(min=3, max=299, message="Question title must be between %(min)d  and %(max)d  characters.")],
+        render_kw={"placeholder": "Enter question title"})
+    question_body = TextAreaField(
+        'Question Body', 
+        validators=[
+            DataRequired(message="Question body is required."),
+            Length(min=0, max=4194302, message="Question body must be between %(min)d  and %(max)d  characters.")],
+            render_kw={"placeholder": "Enter the Question Body"})
+    possible_points = DecimalField(
+        "Possible Points",
+        validators = [
+            DataRequired(message="Possible Points is required."),
+            NumberRange(min=0, message="Possible Points must be greater than %(min)s.")])
     submit = SubmitField('Add Question')
 
 
-class QuizSettingsForm(FlaskForm):
-    """
-    Form for configuring quiz settings.
+class AddFreeResponseQuestion(AddQuestion):
+    """This class represents a form to add a free response question.  This class extends AddQuestion"""
+    question_solution = TextAreaField(
+        'Question Solution', 
+        validators=[
+            DataRequired(message="Question solution is required."),
+            Length(min=0, max=4194302, message="Question solution must be between %(min)d  and %(max)d  characters.")],
+            render_kw={"placeholder": "Enter the question solution to be referenced by graders."})
+
+
+class AddTrueFalseQuestion(AddQuestion):
+    """This class represents a form to add a True/ False question.  This class extends AddQuestion"""
+    true_option_weight = IntegerField(
+        "True Option Weight",
+        validators = [
+            DataRequired(message="True Option Weight is required."),
+            NumberRange(min=0, max=100, message="True Option Weight must be between %(min)s and %(max)d.")])
+    false_option_weight = IntegerField(
+        "False Option Weight",
+        validators = [
+            DataRequired(message="False Option Weight is required."),
+            NumberRange(min=0, max=100, message="False Option Weight must be between %(min)s and %(max)d.")])
     
-    Attributes
-    ----------
-    time_limit : SelectField
-        The time limit for the quiz.
-    start_date : DateField
-        The start date when the quiz becomes available.
-    end_date : DateField
-        The end date when the quiz is no longer available.
-    randomize : RadioField
-        Option to randomize the order of questions.
-    submit : SubmitField
-        Form submission button labeled 'Publish'.
-    """
-    time_limit = SelectField('Time limit', choices=[
-        ('', 'Select the time limit'),
-        ('30', '30 minutes'),
-        ('60', '1 hour'),
-        ('90', '1.5 hours'),
-        ('120', '2 hours'),
-        ('unlimited', 'Unlimited')
-        ], 
-        validators=[DataRequired()])
 
-    start_date = DateField('Start date', format='%Y-%m-%d', validators=[DataRequired()])
-    end_date = DateField('End date', format='%Y-%m-%d', validators=[DataRequired()])
-
-    randomize = RadioField('Randomize questions?', choices=[
-        ('yes', 'Yes'),
-        ('no', 'No')
-        ], 
-        default='no', 
-        validators=[DataRequired()])
-
-    submit = SubmitField('Publish')
+class AddChoiceQuestion(AddQuestion):
+    """This class represents a form to add a multiple choice/ multiple selection question.  This class extends AddQuestion"""
+    option_one_text = TextAreaField(
+        'Option One Text', 
+        validators=[
+            DataRequired(message="Option One Text is required."),
+            Length(min=0, max=4194302, message="Option One Text must be between %(min)d  and %(max)d  characters.")],
+            render_kw={"placeholder": "Enter the option text"})
+    option_one_weight = IntegerField(
+        "Option One Weight",
+        validators = [
+            DataRequired(message="Option One Weight is required."),
+            NumberRange(min=0, max=100, message="Option One Weight must be between %(min)s and %(max)d.")])
+    option_two_text = TextAreaField(
+        'Option Two Text', 
+        validators=[
+            DataRequired(message="Option Two Text is required."),
+            Length(min=0, max=4194302, message="Option Two Text must be between %(min)d  and %(max)d  characters.")],
+            render_kw={"placeholder": "Enter the option text"})
+    option_two_weight = IntegerField(
+        "Option Two Weight",
+        validators = [
+            DataRequired(message="Option Two Weight is required."),
+            NumberRange(min=0, max=100, message="Option Two Weight must be between %(min)s and %(max)d.")])
+    option_three_text = TextAreaField(
+        'Option Three Text', 
+        validators=[
+            DataRequired(message="Option Three Text is required."),
+            Length(min=0, max=4194302, message="Option Three Text must be between %(min)d  and %(max)d  characters.")],
+            render_kw={"placeholder": "Enter the option text"})
+    option_three_weight = IntegerField(
+        "Option Three Weight",
+        validators = [
+            DataRequired(message="Option Three Weight is required."),
+            NumberRange(min=0, max=100, message="Option Three Weight must be between %(min)s and %(max)d.")])
+    option_four_text = TextAreaField(
+        'Option Four Text', 
+        validators=[
+            DataRequired(message="Option Four Text is required."),
+            Length(min=0, max=4194302, message="Option Four Text must be between %(min)d  and %(max)d  characters.")],
+            render_kw={"placeholder": "Enter the option text"})
+    option_four_weight = IntegerField(
+        "Option Four Weight",
+        validators = [
+            DataRequired(message="Option Four Weight is required."),
+            NumberRange(min=0, max=100, message="Option Four Weight must be between %(min)s and %(max)d.")])

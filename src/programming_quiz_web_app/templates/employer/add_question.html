@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz Editor
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbars/navbar2.html' %}
+{% endblock %}
+
+{% block app_content %}
+    <!-- Main Content -->
+    <div class="container content-container-add-items">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-4 sidebar">
+                <div>
+                    <h5 class="fw-bold" id="quiz-title">{{ quiz_title }}</h5>
+                    <ul class="list-group" id="question-list">
+                        {% for question in questions %}
+                            <li class="list-group-item d-flex align-items-center">
+                                <input type="radio" name="question" id="question{{ question.id }}" class="form-check-input me-2">
+                                <label for="question{{ question.id }}" class="flex-grow-1">
+                                    {{ question.body }}
+                                </label>
+                                {% if question.type == 'multiple-choice' %}
+                                    <span class="badge bg-primary ms-auto">Multiple Choice</span>
+                                {% elif question.type == 'true-false' %}
+                                    <span class="badge bg-secondary ms-auto">True/False</span>
+                                {% elif question.type == 'free-form' %}
+                                    <span class="badge bg-success ms-auto">Free-Form</span>
+                                {% elif question.type == 'code-snippet' %}
+                                    <span class="badge bg-warning ms-auto">Code Snippet</span>
+                                {% endif %}
+                            </li>
+                        {% else %}
+                            <li class="list-group-item">No questions added yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="sidebar-buttons mt-auto">
+                    <button class="action-link" id="edit-btn">Edit item</button>
+                    <button class="action-link" id="remove-btn">Remove item</button>
+                </div>
+            </div>
+            <!-- Main Editor -->
+            <div class="col-md-8 main-content">
+                <!-- Add New Question -->
+                <h5 class="fw-bold mb-4">Add new question</h5>
+                <div class="accordion" id="accordion_forms">
+                    {# Multiple Choice #}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button{% if form and form=='form_mc' %}{% else %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_multi_choice">
+                                Multiple Choice Question
+                            </button>
+                        </h2>
+                        <div id="accordion_multi_choice" class="accordion-collapse collapse{% if form and form=='form_mc' %} show{% endif %}" data-bs-parent="#accordion_forms">
+                            <div class="accordion-body">
+                                <form method="POST" action="{{ url_for('employer.add_items', quiz_id=quiz_id, form='form_mc') }}" novalidate>
+                                    {{ form_mc.hidden_tag() }}
+                                    {# Multiple Choice Form - Question Title #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.question_title.label(class="form-label fw-bold") }}
+                                        {{ form_mc.question_title(class="form-control is-invalid" if form_mc.question_title.errors else "form-control") }}
+                                        {% if form_mc.question_title.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.question_title.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Possible Points #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.possible_points.label(class="form-label fw-bold") }}
+                                        {{ form_mc.possible_points(class="form-control is-invalid" if form_mc.possible_points.errors else "form-control") }}
+                                        {% if form_mc.possible_points.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.possible_points.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Question Body #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.question_body.label(class="form-label fw-bold") }}
+                                        {{ form_mc.question_body(class="form-control textarea-large mb-3 is-invalid" if form_mc.question_body.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_mc.question_body.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.question_body.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Option 1 Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_one_weight.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_one_weight(class="form-control is-invalid" if form_mc.option_one_weight.errors else "form-control") }}
+                                        {% if form_mc.option_one_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_one_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Option 1 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_one_text.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_one_text(class="form-control textarea-large mb-3 is-invalid" if form_mc.option_one_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_mc.option_one_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_one_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Option 2 Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_two_weight.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_two_weight(class="form-control is-invalid" if form_mc.option_two_weight.errors else "form-control") }}
+                                        {% if form_mc.option_two_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_two_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Option 2 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_two_text.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_two_text(class="form-control textarea-large mb-3 is-invalid" if form_mc.option_two_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_mc.option_two_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_two_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Option 3 Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_three_weight.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_three_weight(class="form-control is-invalid" if form_mc.option_three_weight.errors else "form-control") }}
+                                        {% if form_mc.option_three_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_three_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Option 3 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_three_text.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_three_text(class="form-control textarea-large mb-3 is-invalid" if form_mc.option_three_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_mc.option_three_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_three_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                   {# Multiple Choice Form - Option 4 Weight #}
+                                   <div class="form-group mb-4">
+                                    {{ form_mc.option_four_weight.label(class="form-label fw-bold") }}
+                                    {{ form_mc.option_four_weight(class="form-control is-invalid" if form_mc.option_four_weight.errors else "form-control") }}
+                                    {% if form_mc.option_four_weight.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form_mc.option_four_weight.errors[0] }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                    {# Multiple Choice Form - Option 4 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_mc.option_four_text.label(class="form-label fw-bold") }}
+                                        {{ form_mc.option_four_text(class="form-control textarea-large mb-3 is-invalid" if form_mc.option_four_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_mc.option_four_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_mc.option_four_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Choice Form - Submit #}
+                                    <div class="text-end">
+                                        {{ form_mc.submit(class="btn btn-dark") }}
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    {# Multiple Selection #}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button{% if form and form=='form_ms' %}{% else %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_multi_selection">
+                                Multiple Selection Question
+                            </button>
+                        </h2>
+                        <div id="accordion_multi_selection" class="accordion-collapse collapse{% if form and form=='form_ms' %} show{% endif %}" data-bs-parent="#accordion_forms">
+                            <div class="accordion-body">
+                                <form method="POST" action="{{ url_for('employer.add_items', quiz_id=quiz_id, form='form_ms') }}" novalidate>
+                                    {{ form_ms.hidden_tag() }}
+                                    {# Multiple Selection Form - Question Title #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.question_title.label(class="form-label fw-bold") }}
+                                        {{ form_ms.question_title(class="form-control is-invalid" if form_ms.question_title.errors else "form-control") }}
+                                        {% if form_ms.question_title.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.question_title.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Possible Points #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.possible_points.label(class="form-label fw-bold") }}
+                                        {{ form_ms.possible_points(class="form-control is-invalid" if form_ms.possible_points.errors else "form-control") }}
+                                        {% if form_ms.possible_points.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.possible_points.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Question Body #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.question_body.label(class="form-label fw-bold") }}
+                                        {{ form_ms.question_body(class="form-control textarea-large mb-3 is-invalid" if form_ms.question_body.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_ms.question_body.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.question_body.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Option 1 Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_one_weight.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_one_weight(class="form-control is-invalid" if form_ms.option_one_weight.errors else "form-control") }}
+                                        {% if form_ms.option_one_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_one_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Option 1 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_one_text.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_one_text(class="form-control textarea-large mb-3 is-invalid" if form_ms.option_one_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_ms.option_one_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_one_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Option 2 Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_two_weight.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_two_weight(class="form-control is-invalid" if form_ms.option_two_weight.errors else "form-control") }}
+                                        {% if form_ms.option_two_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_two_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Option 2 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_two_text.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_two_text(class="form-control textarea-large mb-3 is-invalid" if form_ms.option_two_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_ms.option_two_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_two_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Option 3 Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_three_weight.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_three_weight(class="form-control is-invalid" if form_ms.option_three_weight.errors else "form-control") }}
+                                        {% if form_ms.option_three_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_three_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Option 3 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_three_text.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_three_text(class="form-control textarea-large mb-3 is-invalid" if form_ms.option_three_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_ms.option_three_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_three_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                   {# Multiple Selection Form - Option 4 Weight #}
+                                   <div class="form-group mb-4">
+                                    {{ form_ms.option_four_weight.label(class="form-label fw-bold") }}
+                                    {{ form_ms.option_four_weight(class="form-control is-invalid" if form_ms.option_four_weight.errors else "form-control") }}
+                                    {% if form_ms.option_four_weight.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form_ms.option_four_weight.errors[0] }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                    {# Multiple Selection Form - Option 4 Text #}
+                                    <div class="form-group mb-4">
+                                        {{ form_ms.option_four_text.label(class="form-label fw-bold") }}
+                                        {{ form_ms.option_four_text(class="form-control textarea-large mb-3 is-invalid" if form_ms.option_four_text.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_ms.option_four_text.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_ms.option_four_text.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Multiple Selection Form - Submit #}
+                                    <div class="text-end">
+                                        {{ form_ms.submit(class="btn btn-dark") }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {# True/ False #}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button{% if form and form=='form_tf' %}{% else %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_true_false">
+                                True/ False Question
+                            </button>
+                        </h2>
+                        <div id="accordion_true_false" class="accordion-collapse collapse{% if form and form=='form_tf' %} show{% endif %}" data-bs-parent="#accordion_forms">
+                            <div class="accordion-body">
+                                <form method="POST" action="{{ url_for('employer.add_items', quiz_id=quiz_id, form='form_tf') }}" novalidate>
+                                    {{ form_tf.hidden_tag() }}
+                                    {# True/ False Form - Question Title #}
+                                    <div class="form-group mb-4">
+                                        {{ form_tf.question_title.label(class="form-label fw-bold") }}
+                                        {{ form_tf.question_title(class="form-control is-invalid" if form_tf.question_title.errors else "form-control") }}
+                                        {% if form_tf.question_title.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_tf.question_title.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# True/ False Form - Possible Points #}
+                                    <div class="form-group mb-4">
+                                        {{ form_tf.possible_points.label(class="form-label fw-bold") }}
+                                        {{ form_tf.possible_points(class="form-control is-invalid" if form_tf.possible_points.errors else "form-control") }}
+                                        {% if form_tf.possible_points.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_tf.possible_points.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# True/ False Form - Question Body #}
+                                    <div class="form-group mb-4">
+                                        {{ form_tf.question_body.label(class="form-label fw-bold") }}
+                                        {{ form_tf.question_body(class="form-control textarea-large mb-3 is-invalid" if form_tf.question_body.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_tf.question_body.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_tf.question_body.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# True/ False Form - True Option Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_tf.true_option_weight.label(class="form-label fw-bold") }}
+                                        {{ form_tf.true_option_weight(class="form-control is-invalid" if form_tf.true_option_weight.errors else "form-control") }}
+                                        {% if form_tf.true_option_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_tf.true_option_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>  
+                                    {# True/ False Form - False Option Weight #}
+                                    <div class="form-group mb-4">
+                                        {{ form_tf.false_option_weight.label(class="form-label fw-bold") }}
+                                        {{ form_tf.false_option_weight(class="form-control is-invalid" if form_tf.false_option_weight.errors else "form-control") }}
+                                        {% if form_tf.false_option_weight.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_tf.false_option_weight.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>  
+                                    {# True/ False Form - Submit #}
+                                    <div class="text-end">
+                                        {{ form_tf.submit(class="btn btn-dark") }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {# Free Response #}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button{% if form and form=='form_free' %}{% else %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_free_response">
+                                Free Response
+                            </button>
+                        </h2>
+                        <div id="accordion_free_response" class="accordion-collapse collapse{% if form and form=='form_free' %} show{% endif %}" data-bs-parent="#accordion_forms">
+                            <div class="accordion-body">
+                                <form method="POST" action="{{ url_for('employer.add_items', quiz_id=quiz_id, form='form_free') }}" novalidate>
+                                    {{ form_free.hidden_tag() }}
+                                    {# Form - Question Title #}
+                                    <div class="form-group mb-4">
+                                        {{ form_free.question_title.label(class="form-label fw-bold") }}
+                                        {{ form_free.question_title(class="form-control is-invalid" if form_free.question_title.errors else "form-control") }}
+                                        {% if form_free.question_title.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_free.question_title.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Free Response Form - Possible Points #}
+                                    <div class="form-group mb-4">
+                                        {{ form_free.possible_points.label(class="form-label fw-bold") }}
+                                        {{ form_free.possible_points(class="form-control is-invalid" if form_free.possible_points.errors else "form-control") }}
+                                        {% if form_free.possible_points.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_free.possible_points.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Free Response Form - Question Body #}
+                                    <div class="form-group mb-4">
+                                        {{ form_free.question_body.label(class="form-label fw-bold") }}
+                                        {{ form_free.question_body(class="form-control textarea-large mb-3 is-invalid" if form_free.question_body.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_free.question_body.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_free.question_body.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Free Response Form - Question Solution #}
+                                    <div class="form-group mb-4">
+                                        {{ form_free.question_solution.label(class="form-label fw-bold") }}
+                                        {{ form_free.question_solution(class="form-control textarea-large mb-3 is-invalid" if form_free.question_solution.errors else "form-control textarea-large mb-3") }}
+                                        {% if form_free.question_solution.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form_free.question_solution.errors[0] }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# Free Response Form - Submit #}
+                                    <div class="text-end">
+                                        {{ form_free.submit(class="btn btn-dark") }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Extra Spacing -->
+                <div class="extra-spacing"></div>
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between btn-row">
+                    <a href="#" class="btn btn-dark">Previous</a>
+                    <a href="#" class="btn btn-dark">Next</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

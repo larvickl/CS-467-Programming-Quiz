@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
-from programming_quiz_web_app.employer.forms import QuizDetailsForm, AddQuestionForm, QuizSettingsForm
+from programming_quiz_web_app.employer.forms import QuizDetailsForm, AddFreeResponseQuestion, AddTrueFalseQuestion, AddChoiceQuestion
 from programming_quiz_web_app import db
 
 
@@ -97,33 +97,50 @@ def quiz_details():
 @bp.route('/quiz/add_items/<int:quiz_id>', methods=['GET', 'POST'])
 def add_items(quiz_id):
     """Route to add/edit items for a specific quiz"""
+    form_submitted = request.args.get("form", default=None, type=str)
 
-    form = AddQuestionForm()
+    form_free = AddFreeResponseQuestion()
+    form_tf = AddTrueFalseQuestion()
+    form_multi_choice = AddChoiceQuestion()
+    form_multi_select = AddChoiceQuestion()
     
     # Fetch quiz data
     quiz = Quizzes.query.get(quiz_id)
-
     if not quiz:
         flash('The requested quiz was not found.', 'danger')
         return redirect(url_for('employer.dashboard'))
 
-    # Minimal form handling
-    if form.validate_on_submit():
-        # Placeholder: Flash a success message
-        flash('Form submitted successfully!', 'success')
+    # Multiple choice form submitted.
+    if form_submitted == "form_mc" and form_multi_choice.validate_on_submit():
+        flash('Multiple choice question successfully added!', 'success')
         return redirect(url_for('employer.add_items', quiz_id=quiz_id))
-    
+    # Multiple selection submitted.
+    elif form_submitted == "form_ms" and form_multi_select.validate_on_submit():
+        flash('Multiple selection question successfully added!', 'success')
+        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+    # True/ False choice submitted.
+    elif form_submitted == "form_tf" and form_tf.validate_on_submit():
+        flash('True/ False question successfully added!', 'success')
+        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+    # Free response submitted.
+    elif form_submitted == "form_free" and form_free.validate_on_submit():
+        flash('Free response question successfully added!', 'success')
+        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+
     # Prepare context data with dummy or fetched data
     context = {
+        'quiz_id': quiz_id,
         'quiz_title': quiz.name,
         'questions': quiz.free_response_questions,
         'free_response_questions': quiz.free_response_questions,
-        'form': form,
+        'form': form_submitted,
+        'form_free': form_free,
+        'form_tf': form_tf,
+        'form_mc': form_multi_choice,
+        'form_ms': form_multi_select,
         'progress_percentage': 58,  # Static value; adjust as needed
-        'current_year': dt.datetime.now().year
-    }
-        
-    return render_template('employer/quiz_settings2.html', **context)
+        'current_year': dt.datetime.now().year}  
+    return render_template('employer/add_question.html', **context)
 
 @bp.route('/quiz/quiz_settings/<int:quiz_id>', methods=['GET', 'POST'])
 def quiz_settings(quiz_id):
@@ -132,17 +149,7 @@ def quiz_settings(quiz_id):
     if not quiz:
         flash('Quiz not found. Displaying dummy data.', 'warning')
 
-    form = QuizSettingsForm()
-
-    if form.validate_on_submit():
-        # Update quiz settings with form data
-        quiz.time_limit = form.time_limit.data
-        quiz.start_date = form.start_date.data
-        quiz.end_date = form.end_date.data
-        quiz.randomize = form.randomize.data
-
     return render_template(
         'employer/quiz_settings3.html',
-        form=form,
         quiz_id=quiz_id
     )
