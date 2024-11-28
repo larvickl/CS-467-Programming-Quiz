@@ -131,9 +131,6 @@ class Quizzes(db.Model):
         all_questions.sort(key=get_order)
         return all_questions
 
-        
-
-
 
 class FreeResponseQuestions(db.Model):
     """The schema for the FreeResponseQuestions table."""

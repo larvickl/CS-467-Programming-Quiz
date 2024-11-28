@@ -146,7 +146,7 @@ def add_items(quiz_id):
     context = {
         'quiz_id': quiz_id,
         'quiz_title': quiz.name,
-        'questions': quiz.free_response_questions,
+        'questions': quiz.get_ordered_questions(),
         'free_response_questions': quiz.free_response_questions,
         'form': form_submitted,
         'form_free': form_free,

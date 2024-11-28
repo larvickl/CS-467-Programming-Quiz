@@ -14,33 +14,31 @@ Quiz Editor
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-4 sidebar">
-                <div>
+                <div class="row">
                     <h5 class="fw-bold" id="quiz-title">{{ quiz_title }}</h5>
                     <ul class="list-group" id="question-list">
                         {% for question in questions %}
                             <li class="list-group-item d-flex align-items-center">
-                                <input type="radio" name="question" id="question{{ question.id }}" class="form-check-input me-2">
                                 <label for="question{{ question.id }}" class="flex-grow-1">
-                                    {{ question.body }}
+                                    <p class="fw-bold">({{question.possible_points}}pts.) {{question.title}}</p>
+                                    <p>{{ question.body }}</p>
                                 </label>
-                                {% if question.type == 'multiple-choice' %}
-                                    <span class="badge bg-primary ms-auto">Multiple Choice</span>
-                                {% elif question.type == 'true-false' %}
-                                    <span class="badge bg-secondary ms-auto">True/False</span>
-                                {% elif question.type == 'free-form' %}
-                                    <span class="badge bg-success ms-auto">Free-Form</span>
-                                {% elif question.type == 'code-snippet' %}
-                                    <span class="badge bg-warning ms-auto">Code Snippet</span>
+                                {% if question.__tablename__ == "ChoiceQuestions" %}
+                                    {% if question.question_type == "true-false" %}
+                                        <span class="badge bg-secondary ms-auto">True/False</span>
+                                    {% elif question.question_type == "multiple-choice" %}
+                                        <span class="badge bg-primary ms-auto">Multiple Choice</span>
+                                    {% elif question.question_type == "multiple-selection" %}
+                                        <span class="badge bg-warning ms-auto">Multiple Selection</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge bg-success ms-auto">Free Response</span>
                                 {% endif %}
                             </li>
                         {% else %}
                             <li class="list-group-item">No questions added yet.</li>
                         {% endfor %}
                     </ul>
-                </div>
-                <div class="sidebar-buttons mt-auto">
-                    <button class="action-link" id="edit-btn">Edit item</button>
-                    <button class="action-link" id="remove-btn">Remove item</button>
                 </div>
             </div>
             <!-- Main Editor -->
