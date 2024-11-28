@@ -97,6 +97,7 @@ def quiz_details():
 @bp.route('/quiz/add_items/<int:quiz_id>', methods=['GET', 'POST'])
 def add_items(quiz_id):
     """Route to add/edit items for a specific quiz"""
+    # Determine which form, if any, was submitted.
     form_submitted = request.args.get("form", default=None, type=str)
 
     form_free = AddFreeResponseQuestion()
@@ -124,8 +125,22 @@ def add_items(quiz_id):
         return redirect(url_for('employer.add_items', quiz_id=quiz_id))
     # Free response submitted.
     elif form_submitted == "form_free" and form_free.validate_on_submit():
-        flash('Free response question successfully added!', 'success')
-        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        new_question = FreeResponseQuestions(
+            title = form_free.question_title.data,
+            body = form_free.question_body.data,
+            solution = form_free.question_solution.data,
+            possible_points = form_free.possible_points.data,
+            order = len(quiz.choice_questions) + 1,
+            quiz_id = quiz.id
+        )
+        try:
+            db.session.add(new_question)
+            db.session.commit()
+            flash('Free response question successfully added!', 'success')
+            return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        except Exception as the_exception:
+            db.session.rollback()
+            current_app.logger.exception(the_exception)
 
     # Prepare context data with dummy or fetched data
     context = {
