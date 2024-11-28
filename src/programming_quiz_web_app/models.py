@@ -100,8 +100,39 @@ class Quizzes(db.Model):
     # Relationships.
     created_by: Mapped["Users"] = db.relationship("Users", back_populates="quizzes")
     assignments: Mapped[List["Assignments"]] = db.relationship("Assignments", back_populates="quiz")
-    choice_questions: Mapped[List["ChoiceQuestions"]] = db.relationship("ChoiceQuestions", back_populates="quiz")
-    free_response_questions: Mapped[List["FreeResponseQuestions"]] = db.relationship("FreeResponseQuestions", back_populates="quiz")
+    choice_questions: Mapped[List["ChoiceQuestions"]] = db.relationship("ChoiceQuestions", back_populates="quiz", order_by="ChoiceQuestions.id")
+    free_response_questions: Mapped[List["FreeResponseQuestions"]] = db.relationship("FreeResponseQuestions", back_populates="quiz", order_by="FreeResponseQuestions.id")
+    # Methods
+    def get_ordered_questions(self):
+        """Get all questions ordered by "order".
+
+            Returns
+            -------
+            list[ChoiceQuestions, FreeResponseQuestions]
+                A list containing the ordered questions.
+        """
+        def get_order(entry: ChoiceQuestions | FreeResponseQuestions) -> int:
+            """A function to get the order of a ChoiceQuestion or a FreeResponseQuestion for sorting.
+
+            Parameters
+            ----------
+            entry : ChoiceQuestions | FreeResponseQuestions
+                The item to get the order of.
+
+            Returns
+            -------
+            int
+                The question order.
+            """
+            return entry.order
+        
+        # Get all questions.
+        all_questions = self.choice_questions + self.free_response_questions
+        all_questions.sort(key=get_order)
+        return all_questions
+
+        
+
 
 
 class FreeResponseQuestions(db.Model):
