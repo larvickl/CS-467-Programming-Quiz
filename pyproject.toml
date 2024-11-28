@@ -37,6 +37,7 @@ dependencies = [
     "SQLAlchemy",
     "mysql-connector-python",
     'bleach[css]',
+    "PyJWT"
 ]
 dynamic = ["version"]
 
