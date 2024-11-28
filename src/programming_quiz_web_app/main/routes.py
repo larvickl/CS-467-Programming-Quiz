@@ -32,8 +32,6 @@ def confirm_start_quiz():
         flash("Quiz not found.", "danger")
         return redirect(url_for('main.index'))
     
-    print(quiz_start)
-
     if quiz_start == "yes":
         flash("Quiz has started. Good luck!", "success")
         return redirect(url_for('applicant/take_quiz.html', id=quiz.id))
