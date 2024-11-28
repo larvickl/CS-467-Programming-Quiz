@@ -70,35 +70,29 @@ def request_password_reset():
         # Check db for pre-existing account
         user = Users.query.filter_by(email=email).first()
         if not user:
-            flash('No account found with that email address.', 'danger')
+            flash('No account found.', 'danger')
             return redirect(url_for('auth.request_password_reset'))
-
         # Generate a reset token
         token = jwt.encode({'email': email, 'exp': dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=24)}, 
                            current_app.config['SECRET_KEY'], algorithm='HS256')
         reset_link = url_for('auth.reset_password', token=token, _external=True)
-
-        # Send the reset email using the provided method
         try:
             send_password_reset_email(email, reset_link)
             flash('Reset link sent! Please check your email.', 'success')
         except Exception as e:
             current_app.logger.error(f"Error sending password reset email: {e}")
-            flash('Failed to send reset email. Please try again later.', 'danger')
-
+            flash('Failed to send reset email. Please try again.', 'danger')
         return redirect(url_for('auth.login'))
-
+    
     return render_template('auth/request_password_reset.html', title="Request Password Reset", form=form)
-
 
 @bp.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     """This is the endpoint to reset user's password."""
     token = request.args.get('token')
     if not token:
-        flash('Invalid or missing reset token.', 'danger')
+        flash('Invalid reset token.', 'danger')
         return redirect(url_for('auth.request_password_reset'))
-
     form = PasswordResetForm()
     if form.validate_on_submit():
         new_password = form.password.data
@@ -107,24 +101,21 @@ def reset_password():
             payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
             email = payload['email']
         except jwt.ExpiredSignatureError:
-            flash('Reset token has expired. Please request a new one.', 'danger')
+            flash('Reset token has expired.', 'danger')
             return redirect(url_for('auth.request_password_reset'))
         except jwt.InvalidTokenError:
-            flash('Invalid reset token. Please try again.', 'danger')
+            flash('Invalid reset token.', 'danger')
             return redirect(url_for('auth.request_password_reset'))
-
         user = Users.query.filter_by(email=email).first()
         if not user:
-            flash('User not found. Please try again.', 'danger')
+            flash('User not found.', 'danger')
             return redirect(url_for('auth.request_password_reset'))
-
         # Create new password hash and commit to db
         hashed_password = generate_password_hash(new_password)
         user.password_hash = hashed_password
         db.session.commit()
-
-        flash('Password successfully changed. Please log in.', 'success')
+        flash('Password successfully changed! Please log in.', 'success')
         return redirect(url_for('auth.login'))
-
+    
     return render_template('auth/reset_password.html', title="Reset Password", form=form)
 
