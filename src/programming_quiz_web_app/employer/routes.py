@@ -91,12 +91,11 @@ def quiz_details():
             current_app.logger.exception(the_exception)
             db.session.rollback()
             flash('Error creating new quiz!', 'danger')
-    return render_template('employer/quiz_settings1.html', form=form, current_year=dt.datetime.now(dt.timezone.utc).year)
-
+    return render_template('employer/add_quiz.html', form=form, current_year=dt.datetime.now(dt.timezone.utc).year)
 
 @bp.route('/quiz/add_items/<int:quiz_id>', methods=['GET', 'POST'])
 def add_items(quiz_id):
-    """Route to add/edit items for a specific quiz"""
+    """Route to add items for a specific quiz"""
     # Determine which form, if any, was submitted.
     form_submitted = request.args.get("form", default=None, type=str)
     # Fetch quiz data
@@ -242,15 +241,3 @@ def add_items(quiz_id):
         'progress_percentage': 58,  # Static value; adjust as needed
         'current_year': dt.datetime.now().year}  
     return render_template('employer/add_question.html', **context)
-
-@bp.route('/quiz/quiz_settings/<int:quiz_id>', methods=['GET', 'POST'])
-def quiz_settings(quiz_id):
-    quiz = Quizzes.query.get(quiz_id)
-
-    if not quiz:
-        flash('Quiz not found. Displaying dummy data.', 'warning')
-
-    return render_template(
-        'employer/quiz_settings3.html',
-        quiz_id=quiz_id
-    )
