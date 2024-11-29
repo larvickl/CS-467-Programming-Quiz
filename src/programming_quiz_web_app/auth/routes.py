@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from programming_quiz_web_app.auth.forms import RegistrationValidator, LoginForm, PasswordResetRequestForm, PasswordResetForm
 from programming_quiz_web_app import db
 from programming_quiz_web_app.models import Users
-from programming_quiz_web_app.utilities import send_password_reset_email
+from programming_quiz_web_app.utilities.emails import send_password_reset_email
 from flask_jwt_extended import create_access_token
 import jwt
 import datetime as dt

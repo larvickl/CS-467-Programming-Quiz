@@ -93,7 +93,7 @@ def dashboard():
         recent_activities=recent_activities
     )
 
-@bp.route('/quiz/details', methods=['GET', 'POST'])
+@bp.route('/quiz/create', methods=['GET', 'POST'])
 # Login required here?
 def quiz_details():
     """Route to display and handle the Quiz Details form."""
@@ -105,7 +105,7 @@ def quiz_details():
             name = form.quiz_title.data,
             description = form.quiz_description.data,
             default_time_limit_seconds = int(form.default_time_limit_seconds.data),
-            created_by_id = 21)
+            created_by_id = 1)
         # Commit new quiz to the database.
         try:
             db.session.add(new_quiz)
@@ -309,6 +309,7 @@ def assign_quiz():
     form = AssignQuiz()
     form.quiz.choices = form.quiz.choices + quizzes_choices
     form.applicant.choices = form.applicant.choices + applicants_choices
+    #TODO:  Add the actual user id to created_by_id.
     if form.validate_on_submit():
         # Generate unique URL/ PIN.
         unique_url, url_pin = generate_quiz_url_and_pin()
@@ -364,7 +365,7 @@ def quiz_results(quiz_id):
         for assignment in assignments:
             results.append({
                 'id': assignment.id,
-                'name': f"{assignment.applicants[0].given_name} {assignment.applicants[0].surname}",
+                'name': f"{assignment.applicant.given_name} {assignment.applicant.surname}",
                 'score': assignment.score,
                 'timeTaken': (assignment.submit_time - assignment.start_time).total_seconds() / 60,
                 'completionDate': assignment.submit_time.strftime("%Y-%m-%d %H:%M")
@@ -383,4 +384,5 @@ def quiz_results(quiz_id):
             'results': results
         })
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        current_app.logger.exception(e)
+        return jsonify({'error': "There was an error fetching the requested data.  Please see the error log for more information."}), 500
