@@ -1,4 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify, current_app
+from flask_login import login_required
 from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
@@ -9,6 +10,7 @@ from programming_quiz_web_app import db
 
 
 @bp.route('/dashboard')
+@login_required
 def dashboard():
     """This is the endpoint for the dashboard."""
     # Recent activities
@@ -94,6 +96,7 @@ def dashboard():
     )
 
 @bp.route('/quiz/create', methods=['GET', 'POST'])
+@login_required
 # Login required here?
 def quiz_details():
     """Route to display and handle the Quiz Details form."""
@@ -119,6 +122,7 @@ def quiz_details():
     return render_template('employer/add_quiz.html', form=form, current_year=dt.datetime.now(dt.timezone.utc).year)
 
 @bp.route('/quiz/add_items/<int:quiz_id>', methods=['GET', 'POST'])
+@login_required
 def add_items(quiz_id):
     """Route to add items for a specific quiz"""
     # Determine which form, if any, was submitted.
@@ -268,6 +272,7 @@ def add_items(quiz_id):
     return render_template('employer/add_question.html', **context)
 
 @bp.route('/applicant/add', methods=['GET', 'POST'])
+@login_required
 def add_applicant():
     """Route to add an applicant."""
     # Instantiate Form.
@@ -293,6 +298,7 @@ def add_applicant():
     return render_template("employer/add_applicant.html", form=form)
 
 @bp.route('/applicant/assign', methods=['GET', 'POST'])
+@login_required
 def assign_quiz():
     """Route to assign an applicant a quiz"""
     # Make applicant choices list.
@@ -334,6 +340,7 @@ def assign_quiz():
     return render_template("employer/assign_quiz.html", form=form)
 
 @bp.route('/employer/quiz/<int:quiz_id>/results')
+@login_required
 def quiz_results(quiz_id):
     try:
         # Get all assignments for this quiz that have been submitted

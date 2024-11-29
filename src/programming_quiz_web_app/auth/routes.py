@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, current_app, g
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from programming_quiz_web_app.auth import bp
 from werkzeug.security import generate_password_hash, check_password_hash
 from programming_quiz_web_app.auth.forms import RegistrationValidator, LoginForm, PasswordResetRequestForm, PasswordResetForm
@@ -47,6 +47,7 @@ def login():
     """This is the endpoint for the login page."""
     if current_user.is_authenticated:
         flash('You are already logged in.', 'info')
+        return redirect(url_for('employer.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
@@ -70,6 +71,7 @@ def login():
     return render_template('auth/login.html', title="Login", form=form)
 
 @bp.route('/logout', methods=['GET'])
+@login_required
 def logout():
     """Log the user out from the web interface and redirect to the landing page."""
     try:
