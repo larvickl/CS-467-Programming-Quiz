@@ -55,7 +55,7 @@ def login():
                 db.session.rollback()
                 flash('Failed to store token. Please try again.', 'danger')
                 return redirect(url_for('auth.login'))
-            return redirect(url_for('main.index'))
+            return redirect(url_for('employer.dashboard'))
         else:
             form.password.errors.append('Invalid email or password')
 

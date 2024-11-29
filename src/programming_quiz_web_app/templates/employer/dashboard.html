@@ -30,7 +30,7 @@ Dashboard
         <div class="col-md-7">
             <!-- Button Row -->
             <div class="btn-container">
-                <a href="#" class="btn btn-outline-secondary">Create new quiz</a> 
+                <a href="{{ url_for('employer.quiz_details') }}" class="btn btn-outline-secondary">Create new quiz</a> 
                 <a href="#" class="btn btn-outline-secondary">Add Applicant</a> 
                 <form class="d-inline" method="get" action="#">
                     <input type="text" class="form-control" name="query" placeholder="Search Applicant">
@@ -58,7 +58,7 @@ Dashboard
                 <tbody>
                     {% for quiz in quizzes %}
                         <tr>
-                            <td><a href="#">{{ quiz.name }}</a></td>
+                            <td><a href="javascript:void(0)" data-quiz-id="{{ quiz.id }}" class="quiz-link">{{ quiz.name }}</a></td>
                             <td>{{ quiz.sent }}</td>
                             <td>{{ quiz.takers }}</td>
                         </tr>
@@ -109,4 +109,8 @@ Dashboard
         </div>
     </div>
 </div>
+
+<!-- Scripts -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/components/dashboard/dashboard-handlers.js') }}"></script>
+
 {% endblock %}
