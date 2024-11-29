@@ -37,14 +37,6 @@ users_permissions = db.Table(
     db.Column("permission_id", db.ForeignKey("Permissions.id"), primary_key=True)
 )
 
-# The ApplicantsAssignments association table.
-applicants_assignments = db.Table(
-    "ApplicantsAssignments",
-    db.Model.metadata,
-    db.Column("applicant_id", db.ForeignKey("Applicants.id"), primary_key=True),
-    db.Column("assignment_id", db.ForeignKey("Assignments.id"), primary_key=True)
-)
-
 class Users(db.Model):
     """The schema for the Users table."""
     __tablename__ = 'Users'
@@ -202,11 +194,14 @@ class Assignments(db.Model):
     quiz_id: Mapped[int] = db.mapped_column(
         db.Integer(),
         db.ForeignKey("Quizzes.id", ondelete='RESTRICT', onupdate="CASCADE"))
+    applicant_id: Mapped[int] = db.mapped_column(
+        db.Integer(),
+        db.ForeignKey("Applicants.id", ondelete='RESTRICT', onupdate="CASCADE"))
     # Relationships.
+    applicant: Mapped["Applicants"] = db.relationship("Applicants", back_populates="assignments")
     assigned_by: Mapped["Users"] = db.relationship("Users", back_populates="assignments")
     quiz: Mapped["Quizzes"] = db.relationship("Quizzes", back_populates="assignments")
     answers: Mapped[List["Answers"]] = db.relationship("Answers", back_populates="assignment")
-    applicants: Mapped[List["Applicants"]] = db.relationship(secondary=applicants_assignments, back_populates="assignments")
 
 
 class Answers(db.Model):
@@ -237,4 +232,4 @@ class Applicants(db.Model):
     given_name: Mapped[str] = db.mapped_column(db.String(100))  
     timezone: Mapped[str] = db.mapped_column(db.String(100))
     # Relationship.
-    assignments: Mapped[List["Assignments"]] = db.relationship(secondary=applicants_assignments, back_populates="applicants")
+    assignments: Mapped[List["Assignments"]] = db.relationship("Assignments", back_populates="applicant")
