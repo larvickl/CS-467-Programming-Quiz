@@ -1,5 +1,6 @@
 import datetime as dt
 from email.headerregistry import Address
+from programming_quiz_web_app.default_timezones import all_time_zones
 
 class App_Config:
     # Flask Config
@@ -42,6 +43,9 @@ class App_Config:
     APP_LOG_FILE_NAME = "programming_quiz.log"
     APP_LOG_FILE_MAX_BYTES = 51200  # 50KiB
     APP_LOG_FILE_BACKUP_COUNT = 10
+
+    # Timezones
+    APP_ALL_TIMEZONES = all_time_zones
 
     # SMTP config.
     SMTP_SERVER = "smtp.example.com"
