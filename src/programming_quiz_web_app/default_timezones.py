@@ -1,4 +1,4 @@
-all_time_zones = (
+all_time_zones = [
     ('Africa/Abidjan', 'Africa/Abidjan'),
     ('Africa/Accra', 'Africa/Accra'),
     ('Africa/Addis_Ababa', 'Africa/Addis Ababa'),
@@ -589,4 +589,4 @@ all_time_zones = (
     ('US/Mountain', 'US/Mountain'),
     ('US/Pacific', 'US/Pacific'),
     ('US/Samoa', 'US/Samoa'),
-)
+]

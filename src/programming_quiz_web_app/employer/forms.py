@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextAreaField, SubmitField, DecimalField, IntegerField
-from wtforms.validators import DataRequired, Length, NumberRange
+from wtforms.validators import DataRequired, Length, NumberRange, Email
 from wtforms import ValidationError
 from programming_quiz_web_app.models import Quizzes 
 
@@ -148,3 +148,24 @@ class AddChoiceQuestion(AddQuestion):
         validators = [
             DataRequired(message="Option Four Weight is required."),
             NumberRange(min=0, max=100, message="Option Four Weight must be between %(min)s and %(max)d.")])
+    
+class AddApplicant(FlaskForm):
+    email = StringField('Email', validators=[
+        DataRequired(),
+        Email(),
+        Length(max=299, message='Email must be less than %(max)d characters')],
+        render_kw={"placeholder": "Applicant's Email Address"})
+    surname = StringField(
+        'Surname',
+        validators=[
+            DataRequired(message="Surname is required."),
+            Length(min=3, max=99, message="Surname must be between %(min)d  and %(max)d  characters.")],
+        render_kw={"placeholder": "Surname"})
+    given_name = StringField(
+        'Given Name',
+        validators=[
+            DataRequired(message="Given name is required."),
+            Length(min=3, max=99, message="Given name must be between %(min)d  and %(max)d  characters.")],
+        render_kw={"placeholder": "Given Name"})
+    timezone = SelectField('Timezone', choices=[('', 'Select a timezone')], validators=[DataRequired()])
+    submit = SubmitField('Add Applicant')

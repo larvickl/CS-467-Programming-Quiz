@@ -3,6 +3,7 @@ from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
 from programming_quiz_web_app.employer.forms import QuizDetailsForm, AddFreeResponseQuestion, AddTrueFalseQuestion, AddChoiceQuestion
+from programming_quiz_web_app.employer.forms import AddApplicant
 from programming_quiz_web_app import db
 
 
@@ -241,3 +242,28 @@ def add_items(quiz_id):
         'progress_percentage': 58,  # Static value; adjust as needed
         'current_year': dt.datetime.now().year}  
     return render_template('employer/add_question.html', **context)
+
+@bp.route('/applicant/add', methods=['GET', 'POST'])
+def add_applicant():
+    """Route to add an applicant."""
+    # Instantiate Form.
+    form = AddApplicant()
+    form.timezone.choices = form.timezone.choices + current_app.config["APP_ALL_TIMEZONES"]
+    # Validate form.
+    if form.validate_on_submit():
+        new_applicant = Applicants(
+            email = form.email.data,
+            surname = form.surname.data,
+            given_name = form.given_name.data,
+            timezone = form.timezone.data)
+        try:
+            # Add new applicant.
+            db.session.add(new_applicant)
+            db.session.commit()
+            flash('Successfully added applicant!', 'success')
+            return redirect(url_for('employer.dashboard'))
+        except Exception as the_exception:
+            db.session.rollback()
+            current_app.logger.exception(the_exception)
+            flash('Unable to add applicant.  Please try again!', 'danger')
+    return render_template("employer/add_applicant.html", form=form)

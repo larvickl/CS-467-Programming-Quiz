@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Applicant
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbars/navbar2.html' %}
+{% endblock %}
+
+{% block app_content %}
+    <div class="login-container">
+        <h2>Add an Applicant</h2>        
+        <!-- Form -->
+        <form method="POST" action="" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.email.errors[0] }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- first and last name fields -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="{{ form.given_name.id }}" class="form-label">First name</label>
+                    {{form.given_name(class="form-control") }}
+                    {% if form.given_name.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.given_name.errors[0] }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.surname.id }}" class="form-label">Last name</label>
+                    {{form.surname(class="form-control") }}
+                    {% if form.surname.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.surname.errors[0] }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- password -->
+            <div class="mb-3">
+                {{ form.timezone.label(class="form-label") }}
+                {{form.timezone(class="form-select") }}
+                {% if form.timezone.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.timezone.errors[0] }}
+                    </div>
+                {% endif %}
+            </div>
+            {{form.submit(class="btn btn-dark w-100") }}
+        </form>
+    </div>
+{% endblock %}

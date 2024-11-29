@@ -100,10 +100,10 @@ def make_timezones_file_list() -> None:
     """Make a file containing all timezones that are not depreciated and installed locally."""
     zone_lst = get_timezones()
     # Make string to write.
-    zones_str = "all_time_zones = (\n"
+    zones_str = "all_time_zones = [\n"
     for zone in zone_lst:
         zones_str  = zones_str + f"    {str(zone)},\n"
-    zones_str = zones_str + ")"
+    zones_str = zones_str + "]"
     # Write timezones to file.
     with open("timezone_list.py", "w") as fp:
         fp.write(zones_str)
