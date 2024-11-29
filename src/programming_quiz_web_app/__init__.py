@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
+from flask_login import LoginManager
 from logging.handlers import RotatingFileHandler
 from programming_quiz_web_app.default_config import App_Config
 
@@ -14,6 +15,9 @@ migrate = Migrate()
 talisman = Talisman()
 csrf = CSRFProtect()
 jwt = JWTManager()
+login_manager = LoginManager()
+
+login_manager.login_view = 'auth.login'
 
 def create_app(app_config_env_var: str = "FLASK_APP_CONFIG", app_config_prefix: str = "SPQ_CONFIG") -> Flask:
     """Create a flask application.
@@ -74,6 +78,9 @@ def create_app(app_config_env_var: str = "FLASK_APP_CONFIG", app_config_prefix: 
 
     # Initialize the jwt.
     jwt.init_app(app)
+
+    # Initialize Login manager.
+    login_manager.init_app(app)
 
     # Register Blueprints
     from programming_quiz_web_app.main import bp as main_bp

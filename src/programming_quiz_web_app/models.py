@@ -3,7 +3,8 @@ import sqlalchemy.types as types
 from sqlalchemy.dialects.mysql import TEXT, MEDIUMTEXT, LONGTEXT
 from sqlalchemy.orm import Mapped
 from typing import Optional, List
-from programming_quiz_web_app import db
+from programming_quiz_web_app import db, login_manager
+from flask_login import UserMixin
 
 class TZDateTime(types.TypeDecorator):
     """A database column type that enforces correct time zones.  Aware datetimes
@@ -37,7 +38,7 @@ users_permissions = db.Table(
     db.Column("permission_id", db.ForeignKey("Permissions.id"), primary_key=True)
 )
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     """The schema for the Users table."""
     __tablename__ = 'Users'
     # Columns.
@@ -233,3 +234,19 @@ class Applicants(db.Model):
     timezone: Mapped[str] = db.mapped_column(db.String(100))
     # Relationship.
     assignments: Mapped[List["Assignments"]] = db.relationship("Assignments", back_populates="applicant")
+
+@login_manager.user_loader
+def load_user(id: int | str) -> Users | None:
+    """Return a user given the user's ID.
+
+    Parameters
+    ----------
+    id : int | str
+        The user's ID.
+
+    Returns
+    -------
+    Users | None
+        The user with the given ID, or None if no such user can be found.
+    """
+    return Users.query.get(int(id))

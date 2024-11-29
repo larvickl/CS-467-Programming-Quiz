@@ -1,4 +1,5 @@
-from flask import render_template, flash, redirect, url_for, request, current_app
+from flask import render_template, flash, redirect, url_for, request, current_app, g
+from flask_login import current_user, login_user, logout_user
 from programming_quiz_web_app.auth import bp
 from werkzeug.security import generate_password_hash, check_password_hash
 from programming_quiz_web_app.auth.forms import RegistrationValidator, LoginForm, PasswordResetRequestForm, PasswordResetForm
@@ -8,6 +9,11 @@ from programming_quiz_web_app.utilities.emails import send_password_reset_email
 from flask_jwt_extended import create_access_token
 import jwt
 import datetime as dt
+
+@bp.before_request
+def get_current_user():
+    g.user = current_user
+
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -39,7 +45,8 @@ def register():
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     """This is the endpoint for the login page."""
-
+    if current_user.is_authenticated:
+        flash('You are already logged in.', 'info')
     form = LoginForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
@@ -51,6 +58,7 @@ def login():
                 user.token = token
                 user.last_login = dt.datetime.now(dt.timezone.utc)
                 db.session.commit()
+                login_user(user)
             except:
                 db.session.rollback()
                 flash('Failed to store token. Please try again.', 'danger')
@@ -60,6 +68,18 @@ def login():
             form.password.errors.append('Invalid email or password')
 
     return render_template('auth/login.html', title="Login", form=form)
+
+@bp.route('/logout', methods=['GET'])
+def logout():
+    """Log the user out from the web interface and redirect to the landing page."""
+    try:
+        current_user.token = None
+        db.session.commit()
+    except:
+        db.session.rollback()
+    logout_user()
+    flash('You have successfully logged out.', 'success')
+    return redirect(url_for('main.index'))
 
 @bp.route('/request_password_reset', methods=['GET', 'POST'])
 def request_password_reset():

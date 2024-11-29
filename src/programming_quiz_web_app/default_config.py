@@ -27,6 +27,16 @@ class App_Config:
         'pool_pre_ping': True
         }
 
+    # Flask-login Config
+    REMEMBER_COOKIE_NAME = "remember_token"
+    REMEMBER_COOKIE_DURATION = dt.timedelta(days=2)
+    REMEMBER_COOKIE_DOMAIN = None
+    REMEMBER_COOKIE_PATH = APPLICATION_ROOT if APPLICATION_ROOT is not None else "/"
+    REMEMBER_COOKIE_SECURE = True
+    REMEMBER_COOKIE_HTTPONLY = True
+    REMEMBER_COOKIE_REFRESH_EACH_REQUEST = False
+    REMEMBER_COOKIE_SAMESITE = "Strict"
+
     # Flask-Talisman Config.
     FLASK_TALISMAN_CONFIG = {
         "force_https": True,
