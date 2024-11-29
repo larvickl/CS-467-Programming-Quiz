@@ -12,13 +12,9 @@ Quiz Details
     <div class="content-container container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <!-- Progress Bar -->
-                <div class="progress mb-4">
-                    <div class="progress-bar" style="width: 19%;" aria-valuenow="19" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
 
                 <!-- Quiz Details Section -->
-                <h3 class="mb-4">Step 1: Quiz Details</h3>
+                <h3 class="mb-4">Create Quiz!</h3>
                 <form method="POST" action="{{ url_for('employer.quiz_details') }}" novalidate>
                     {{ form.hidden_tag() }}
 
@@ -58,7 +54,7 @@ Quiz Details
                     <!-- Button Group -->
                     <div class="d-flex justify-content-between mt-5">
                         <a href="{{ url_for('employer.dashboard') }}" class="btn btn-dark">Dashboard</a>
-                        <button type="submit" class="btn btn-dark">Next</button>
+                        <button type="submit" class="btn btn-dark">Add Questions</button>
                     </div>
                 </form>
             </div>

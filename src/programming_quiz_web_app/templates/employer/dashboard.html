@@ -31,10 +31,8 @@ Dashboard
             <!-- Button Row -->
             <div class="btn-container">
                 <a href="{{ url_for('employer.quiz_details') }}" class="btn btn-outline-secondary">Create new quiz</a> 
-                <a href="#" class="btn btn-outline-secondary">Add Applicant</a> 
-                <form class="d-inline" method="get" action="#">
-                    <input type="text" class="form-control" name="query" placeholder="Search Applicant">
-                </form>
+                <a href="{{ url_for('employer.add_applicant') }}" class="btn btn-outline-secondary">Add Applicant</a>
+                <a href="{{ url_for('employer.assign_quiz') }}" class="btn btn-outline-secondary">Assign Quiz</a>
             </div>
 
             <!-- stats bar -->
@@ -78,7 +76,6 @@ Dashboard
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Assigned Quizzes</th>
-                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,11 +89,6 @@ Dashboard
                                 {% else %}
                                     None
                                 {% endfor %}
-                            </td>
-                            <td class="actions-cell">
-                                <a href="#">View</a> 
-                                <a href="#" class="action-link">Edit</a>
-                                <a href="#" class="action-link">Delete</a>
                             </td>
                         </tr>
                     {% else %}
