@@ -99,30 +99,117 @@ def add_items(quiz_id):
     """Route to add/edit items for a specific quiz"""
     # Determine which form, if any, was submitted.
     form_submitted = request.args.get("form", default=None, type=str)
-
-    form_free = AddFreeResponseQuestion()
-    form_tf = AddTrueFalseQuestion()
-    form_multi_choice = AddChoiceQuestion()
-    form_multi_select = AddChoiceQuestion()
-    
     # Fetch quiz data
     quiz = Quizzes.query.get(quiz_id)
     if not quiz:
         flash('The requested quiz was not found.', 'danger')
         return redirect(url_for('employer.dashboard'))
-
+    # Instantiate the forms.
+    form_free = AddFreeResponseQuestion()
+    form_tf = AddTrueFalseQuestion()
+    form_multi_choice = AddChoiceQuestion()
+    form_multi_select = AddChoiceQuestion()
     # Multiple choice form submitted.
     if form_submitted == "form_mc" and form_multi_choice.validate_on_submit():
-        flash('Multiple choice question successfully added!', 'success')
-        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        new_question = ChoiceQuestions(
+            question_type = "multiple-choice",
+            title = form_multi_choice.question_title.data,
+            body = form_multi_choice.question_body.data,
+            auto_grade = True,
+            possible_points = form_multi_choice.possible_points.data,
+            order = len(quiz.get_ordered_questions()) + 1,
+            quiz_id = quiz.id)
+        option_one = Options(option_text=form_multi_choice.option_one_text.data, option_weight=form_multi_choice.option_one_weight.data, order=1)
+        option_two = Options(option_text=form_multi_choice.option_two_text.data, option_weight=form_multi_choice.option_two_weight.data, order=2)
+        option_three = Options(option_text=form_multi_choice.option_three_text.data, option_weight=form_multi_choice.option_three_weight.data, order=3)
+        option_four = Options(option_text=form_multi_choice.option_four_text.data, option_weight=form_multi_choice.option_four_weight.data, order=4)
+        try:
+            db.session.add(new_question)
+            # Flush the new question to the database and refresh to get id.
+            db.session.flush()
+            db.session.refresh(new_question)
+            # Add the question ID to the options.
+            option_one.question_id = new_question.id
+            option_two.question_id = new_question.id
+            option_three.question_id = new_question.id
+            option_four.question_id = new_question.id
+            # Add options to sessions.
+            db.session.add_all([option_one, option_two, option_three, option_four])
+            # Commit changes to database.
+            db.session.commit()
+            flash('Multiple Choice question added!', 'success')
+            return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        except Exception as the_exception:
+            db.session.rollback()
+            current_app.logger.exception(the_exception)
+            flash('Unable to save the question.  Please try again!', 'danger')
     # Multiple selection submitted.
     elif form_submitted == "form_ms" and form_multi_select.validate_on_submit():
-        flash('Multiple selection question successfully added!', 'success')
-        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        new_question = ChoiceQuestions(
+            question_type = "multiple-selection",
+            title = form_multi_select.question_title.data,
+            body = form_multi_select.question_body.data,
+            auto_grade = True,
+            possible_points = form_multi_select.possible_points.data,
+            order = len(quiz.get_ordered_questions()) + 1,
+            quiz_id = quiz.id
+        )
+        option_one = Options(option_text=form_multi_select.option_one_text.data, option_weight=form_multi_select.option_one_weight.data, order=1)
+        option_two = Options(option_text=form_multi_select.option_two_text.data, option_weight=form_multi_select.option_two_weight.data, order=2)
+        option_three = Options(option_text=form_multi_select.option_three_text.data, option_weight=form_multi_select.option_three_weight.data, order=3)
+        option_four = Options(option_text=form_multi_select.option_four_text.data, option_weight=form_multi_select.option_four_weight.data, order=4)
+        try:
+            db.session.add(new_question)
+            # Flush the new question to the database and refresh to get id.
+            db.session.flush()
+            db.session.refresh(new_question)
+            # Add the question ID to the options.
+            option_one.question_id = new_question.id
+            option_two.question_id = new_question.id
+            option_three.question_id = new_question.id
+            option_four.question_id = new_question.id
+            # Add options to sessions.
+            db.session.add_all([option_one, option_two, option_three, option_four])
+            # Commit changes to database.
+            db.session.commit()
+            flash('Multiple Selection question added!', 'success')
+            return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        except Exception as the_exception:
+            db.session.rollback()
+            current_app.logger.exception(the_exception)
+            flash('Unable to save the question.  Please try again!', 'danger')
     # True/ False choice submitted.
     elif form_submitted == "form_tf" and form_tf.validate_on_submit():
-        flash('True/ False question successfully added!', 'success')
-        return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        new_question = ChoiceQuestions(
+            question_type = "true-false",
+            title = form_tf.question_title.data,
+            body = form_tf.question_body.data,
+            auto_grade = True,
+            possible_points = form_tf.possible_points.data,
+            order = len(quiz.get_ordered_questions()) + 1,
+            quiz_id = quiz.id)
+        # True and False options.
+        new_true_option = Options(option_text = "True", option_weight = form_tf.true_option_weight.data, order = 1)
+        new_false_option = Options(option_text = "False", option_weight = form_tf.false_option_weight.data, order = 2)
+        try:
+            db.session.add(new_question)
+            # Flush the new question to the database and refresh to get id.
+            db.session.flush()
+            db.session.refresh(new_question)
+            # Add the question ID to the options.
+            new_true_option.question_id = new_question.id
+            new_false_option.question_id = new_question.id
+            # Add questions to session.
+            db.session.add(new_true_option)
+            db.session.add(new_false_option)
+            # Commit change to database.
+            db.session.commit()
+            flash('True/False question successfully added!', 'success')
+            return redirect(url_for('employer.add_items', quiz_id=quiz_id))
+        except Exception as the_exception:
+            db.session.rollback()
+            current_app.logger.exception(the_exception)
+            flash('Unable to save the question.  Please try again!', 'danger')
     # Free response submitted.
     elif form_submitted == "form_free" and form_free.validate_on_submit():
         new_question = FreeResponseQuestions(
@@ -130,9 +217,8 @@ def add_items(quiz_id):
             body = form_free.question_body.data,
             solution = form_free.question_solution.data,
             possible_points = form_free.possible_points.data,
-            order = len(quiz.choice_questions) + 1,
-            quiz_id = quiz.id
-        )
+            order = len(quiz.get_ordered_questions()) + 1,
+            quiz_id = quiz.id)
         try:
             db.session.add(new_question)
             db.session.commit()
@@ -141,7 +227,7 @@ def add_items(quiz_id):
         except Exception as the_exception:
             db.session.rollback()
             current_app.logger.exception(the_exception)
-
+            flash('Unable to save the question.  Please review errors and try again!', 'danger')
     # Prepare context data with dummy or fetched data
     context = {
         'quiz_id': quiz_id,

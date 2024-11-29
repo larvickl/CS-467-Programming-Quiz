@@ -76,7 +76,6 @@ class AddQuestion(FlaskForm):
     possible_points = DecimalField(
         "Possible Points",
         validators = [
-            DataRequired(message="Possible Points is required."),
             NumberRange(min=0, message="Possible Points must be greater than %(min)s.")])
     submit = SubmitField('Add Question')
 
@@ -96,12 +95,10 @@ class AddTrueFalseQuestion(AddQuestion):
     true_option_weight = IntegerField(
         "True Option Weight",
         validators = [
-            DataRequired(message="True Option Weight is required."),
             NumberRange(min=0, max=100, message="True Option Weight must be between %(min)s and %(max)d.")])
     false_option_weight = IntegerField(
         "False Option Weight",
         validators = [
-            DataRequired(message="False Option Weight is required."),
             NumberRange(min=0, max=100, message="False Option Weight must be between %(min)s and %(max)d.")])
     
 
