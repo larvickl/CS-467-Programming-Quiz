@@ -42,15 +42,26 @@ def confirm_start_quiz():
 def take_quiz(quiz_id):
     """Main quiz-taking interface endpoint."""
     quiz = Quizzes.query.get_or_404(quiz_id)
+    action = request.args.get('action', '')
+    current = request.args.get('current', type=int)
+    answer = request.args.get('answer')
+    question_id = request.args.get('question_id')
+
+    # # Debug prints
+    # print("Choice Questions:", quiz.choice_questions)
+    # print("Free Response Questions:", quiz.free_response_questions)
 
     # Get all questions and put them in order
     questions = []
     questions.extend(quiz.choice_questions)
     questions.extend(quiz.free_response_questions)
+    # print("Combined Questions:", questions)
     questions.sort(key=lambda q: q.order)
+    # print("Sorted Questions:", questions)
 
     if not questions:
-            return redirect(url_for('main.index'))
+        flash("No questions found for this quiz.", "warning")
+        return redirect(url_for('main.index'))
 
     if 'quiz_session' not in session:
         session['quiz_session'] = {
@@ -61,29 +72,28 @@ def take_quiz(quiz_id):
         }
 
     question_number = session['quiz_session']['current_question']
-    current_question = questions[question_number]
-    question_type = 'choice' if isinstance(current_question, ChoiceQuestions) else 'free_response'
 
-    # save answers
+    # # save answers
     if request.method == 'POST':
         answer = request.form.get('answer')
         current_question_id = request.form.get('question_id')
-        
-        if answer and current_question_id:
-            session['quiz_session']['answers'][str(current_question_id)] = {
-                'answer': answer,
-                'type': question_type
-            }
-            session.modified = True
+    
+    if answer and current_question_id:
+        session['quiz_session']['answers'][current_question_id] = answer
+        session.modified = True
 
-        # navigate test
-        action = request.form.get('action')
-        if action == 'next' and question_number < len(questions) - 1:
-            session['quiz_session']['current_question'] += 1
-        elif action == 'previous' and question_number > 0:
-            session['quiz_session']['current_question'] -= 1
-            
-        return redirect(url_for('main.take_quiz', quiz_id=quiz_id))
+    if action and current:
+        current_index = current - 1 
+        if action == 'next' and current_index < len(questions) - 1:
+            session['quiz_session']['current_question'] = current_index + 1
+            session.modified = True
+        elif action == 'previous' and current_index > 0:
+            session['quiz_session']['current_question'] = current_index - 1
+            session.modified = True
+        
+    question_number = session['quiz_session']['current_question']
+    current_question = questions[question_number]
+    question_type = 'choice' if isinstance(current_question, ChoiceQuestions) else 'free_response'
     
     # time limit
     start_time = dt.datetime.fromisoformat(session['quiz_session']['start_time'])
@@ -118,7 +128,8 @@ def confirm_submit_quiz():
         flash("Quiz not found.", "danger")
         return redirect(url_for('main.index'))
     
-    applicant = Applicants.query.get('id', type=int)
+    applicant_id = request.args.get('id', type=int)
+    applicant = Applicants.query.get(applicant_id)
     
     if request.method == 'POST':
         confirm: str = request.form.get('confirm', type=str)
@@ -132,7 +143,7 @@ def confirm_submit_quiz():
             flash("Quiz submitted successfully.", "success")
             return redirect(url_for('applicant/quiz_summary.html', quiz_id=quiz_id))
         else:
-            return redirect(url_for('applicant/take_quiz.html', quiz_id=quiz_id))
+            return redirect(url_for('main.take_quiz', quiz_id=quiz_id))
     
     return render_template('applicant/confirm_submit.html', quiz=quiz)
 
