@@ -4,28 +4,21 @@
 Quiz Details
 {% endblock %}
 
-{% block navbar %}
-    {% include 'navbars/navbar2.html' %}
-{% endblock %}
 
 {% block app_content %}
     <div class="content-container container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <!-- Progress Bar -->
-                <div class="progress mb-4">
-                    <div class="progress-bar" style="width: 19%;" aria-valuenow="19" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
 
                 <!-- Quiz Details Section -->
-                <h3 class="mb-4">Step 1: Quiz Details</h3>
+                <h3 class="mb-4">Create Quiz!</h3>
                 <form method="POST" action="{{ url_for('employer.quiz_details') }}" novalidate>
                     {{ form.hidden_tag() }}
 
                     <!-- Quiz Title -->
                     <div class="form-group mb-4">
                         {{ form.quiz_title.label(class="form-label fw-bold") }}
-                        {{ form.quiz_title(class="form-control", placeholder="Enter quiz title") }}
+                        {{ form.quiz_title(class="form-control is-invalid" if form.quiz_title.errors else "form-control", placeholder="Enter quiz title") }}
                         {% if form.quiz_title.errors %}
                             <div class="invalid-feedback d-block">
                                 {{ form.quiz_title.errors[0] }}
@@ -33,24 +26,24 @@ Quiz Details
                         {% endif %}
                     </div>
 
-                    <!-- Job Title -->
+                    <!-- Time Limit -->
                     <div class="form-group mb-4">
-                        {{ form.job_title.label(class="form-label fw-bold") }}
-                        {{ form.job_title(class="form-select") }}
-                        {% if form.job_title.errors %}
+                        {{ form.default_time_limit_seconds.label(class="form-label fw-bold") }}
+                        {{ form.default_time_limit_seconds(class="form-select is-invalid" if form.default_time_limit_seconds.errors else "form-select") }}
+                        {% if form.default_time_limit_seconds.errors %}
                             <div class="invalid-feedback d-block">
-                                {{ form.job_title.errors[0] }}
+                                {{ form.default_time_limit_seconds.errors[0] }}
                             </div>
                         {% endif %}
                     </div>
 
-                    <!-- Programming Language -->
+                    <!-- Description -->
                     <div class="form-group mb-4">
-                        {{ form.language.label(class="form-label fw-bold") }}
-                        {{ form.language(class="form-select") }}
-                        {% if form.language.errors %}
+                        {{ form.quiz_description.label(class="form-label fw-bold") }}
+                        {{ form.quiz_description(class="form-control is-invalid" if form.quiz_description.errors else "form-control") }}
+                        {% if form.quiz_description.errors %}
                             <div class="invalid-feedback d-block">
-                                {{ form.language.errors[0] }}
+                                {{ form.quiz_description.errors[0] }}
                             </div>
                         {% endif %}
                     </div>
@@ -58,7 +51,7 @@ Quiz Details
                     <!-- Button Group -->
                     <div class="d-flex justify-content-between mt-5">
                         <a href="{{ url_for('employer.dashboard') }}" class="btn btn-dark">Dashboard</a>
-                        <button type="submit" class="btn btn-dark">Next</button>
+                        <button type="submit" class="btn btn-dark">Add Questions</button>
                     </div>
                 </form>
             </div>

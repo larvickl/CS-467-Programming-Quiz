@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Applicant
+{% endblock %}
+
+{% block app_content %}
+    <div class="login-container">
+        <h2>Assign a Quiz</h2>        
+        <!-- Form -->
+        <form method="POST" action="" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.applicant.label(class="form-label") }}
+                {{ form.applicant(class="form-select") }}
+                {% if form.applicant.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.applicant.errors[0] }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.quiz.label(class="form-label") }}
+                {{ form.quiz(class="form-select") }}
+                {% if form.quiz.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.quiz.errors[0] }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- password -->
+            <div class="mb-3">
+                {{ form.expiry.label(class="form-label") }}
+                {{form.expiry(class="form-control") }}
+                {% if form.expiry.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.expiry.errors[0] }}
+                    </div>
+                {% endif %}
+            </div>
+            {{form.submit(class="btn btn-dark w-100") }}
+        </form>
+    </div>
+{% endblock %}

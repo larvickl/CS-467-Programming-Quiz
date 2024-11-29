@@ -28,9 +28,26 @@ def seed_data():
         account_created=dt.datetime.now(dt.timezone.utc),
         last_login=None
     )
-    # Add users.
+
+    # Create example applicants.
+    applicant1 = Applicants(
+        email="james.brown@example.com",
+        surname="Brown",
+        given_name="James",
+        timezone="America/New_York"
+    )
+
+    applicant2 = Applicants(
+        email="emily.lee@example.com",
+        surname="Lee",
+        given_name="Emily",
+        timezone="America/Seattle"
+    )
+
+    # Add users and applicants.
     try:
         db.session.add_all([user1, user2])
+        db.session.add_all([applicant1, applicant2])
         db.session.flush()
     except Exception as the_exception:
         db.session.rollback()
@@ -209,7 +226,8 @@ def seed_data():
         url="https://example.com/URL_TEST_ASSIGNMENT1",
         url_pin="ABC123",
         assigned_by_id=user1.id,
-        quiz_id=quiz1.id
+        quiz_id=quiz1.id,
+        applicant_id=applicant2.id
     )
 
     assignment2 = Assignments(
@@ -222,26 +240,10 @@ def seed_data():
         url="https://example.com/URL_TEST_ASSIGNMENT2",
         url_pin="DEF456",
         assigned_by_id=user2.id,
-        quiz_id=quiz2.id
+        quiz_id=quiz2.id,
+        applicant_id=applicant1.id
     )
     db.session.add_all([assignment1,assignment2])
-
-    # Create example applicants.
-    applicant1 = Applicants(
-        email="james.brown@example.com",
-        surname="Brown",
-        given_name="James",
-        timezone="America/New_York"
-    )
-
-    applicant2 = Applicants(
-        email="emily.lee@example.com",
-        surname="Lee",
-        given_name="Emily",
-        timezone="America/Seattle"
-    )
-
-    db.session.add_all([applicant1, applicant2])
 
     try:
         db.session.commit()
