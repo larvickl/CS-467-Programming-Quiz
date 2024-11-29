@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, SubmitField, DecimalField, IntegerField
+from wtforms import StringField, SelectField, TextAreaField, SubmitField, DecimalField, IntegerField, DateTimeLocalField
 from wtforms.validators import DataRequired, Length, NumberRange, Email
 from wtforms import ValidationError
 from programming_quiz_web_app.models import Quizzes 
@@ -169,3 +169,9 @@ class AddApplicant(FlaskForm):
         render_kw={"placeholder": "Given Name"})
     timezone = SelectField('Timezone', choices=[('', 'Select a timezone')], validators=[DataRequired()])
     submit = SubmitField('Add Applicant')
+
+class AssignQuiz(FlaskForm):
+    applicant = SelectField('Applicant', choices=[('', 'Select an applicant')], validators=[DataRequired()])
+    quiz = SelectField('Quiz', choices=[('', 'Select a quiz')], validators=[DataRequired()])
+    expiry = DateTimeLocalField("Expiry", validators=[DataRequired()])
+    submit = SubmitField('Assign Quiz!')
