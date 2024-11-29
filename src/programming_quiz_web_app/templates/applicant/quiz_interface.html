@@ -31,7 +31,6 @@ Quiz in Progress
             <!-- Current Question -->
             <form id="quizForm" method="POST" action="{{ url_for('main.take_quiz', quiz_id=quiz.id) }}">
                 <input type="hidden" name="current_question" value="{{ current_question_number }}">
-                <input type="hidden" name="action" id="navigationAction" value="">
                 <div class="row">
                     <div class="col-12">
                         <h4>Question {{ current_question_number }} of {{ total_questions }}</h4>
