@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify, current_app
-from flask_login import login_required
+from flask_login import login_required, current_user
 from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
@@ -103,12 +103,11 @@ def quiz_details():
     form = QuizDetailsForm()
     if form.validate_on_submit():
         # Create a new quiz instance
-        #TODO:  Add the actual user id to created_by_id.
         new_quiz = Quizzes(
             name = form.quiz_title.data,
             description = form.quiz_description.data,
             default_time_limit_seconds = int(form.default_time_limit_seconds.data),
-            created_by_id = 1)
+            created_by_id = current_user.id)
         # Commit new quiz to the database.
         try:
             db.session.add(new_quiz)
@@ -315,7 +314,6 @@ def assign_quiz():
     form = AssignQuiz()
     form.quiz.choices = form.quiz.choices + quizzes_choices
     form.applicant.choices = form.applicant.choices + applicants_choices
-    #TODO:  Add the actual user id to created_by_id.
     if form.validate_on_submit():
         # Generate unique URL/ PIN.
         unique_url, url_pin = generate_quiz_url_and_pin()
@@ -325,7 +323,7 @@ def assign_quiz():
             expiry = form.expiry.data.replace(tzinfo=dt.timezone.utc),
             url = unique_url,
             url_pin = url_pin,
-            assigned_by_id = 1,
+            assigned_by_id = current_user.id,
             quiz_id = int(form.quiz.data),
             applicant_id = int(form.applicant.data))
         try:
