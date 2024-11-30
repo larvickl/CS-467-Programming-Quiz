@@ -350,7 +350,7 @@ def quiz_results(quiz_id):
         # Calculate statistics
         total_attempts = len(assignments)
         if total_attempts > 0:
-            total_score = sum(assignment.score for assignment in assignments)
+            total_score = sum(assignment.get_results()["total_score"] for assignment in assignments)
             average_score = round(total_score / total_attempts, 1)
             completion_rate = round((len(assignments) / Assignments.query.filter_by(quiz_id=quiz_id).count()) * 100, 1)
             
@@ -371,7 +371,7 @@ def quiz_results(quiz_id):
             results.append({
                 'id': assignment.id,
                 'name': f"{assignment.applicant.given_name} {assignment.applicant.surname}",
-                'score': assignment.score,
+                'score': (assignment.get_results()["total_score"] / assignment.get_results()["possible_points"])*100,
                 'timeTaken': (assignment.submit_time - assignment.start_time).total_seconds() / 60,
                 'completionDate': assignment.submit_time.strftime("%Y-%m-%d %H:%M")
             })
@@ -384,7 +384,7 @@ def quiz_results(quiz_id):
                 'averageScore': average_score,
                 'completionRate': completion_rate,
                 'totalAttempts': total_attempts,
-                'averageTimeTaken': avg_time_taken
+                'averageTimeTaken': avg_time_taken,
             },
             'results': results
         })

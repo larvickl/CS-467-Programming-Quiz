@@ -21,11 +21,11 @@ def format_time_interval(time_seconds: int) -> str:
     # Format the string.
     formatted_string = ""
     if seconds > 0:
-        formatted_string = f"{seconds} second{'s' if seconds != 1 else ''}"
+        formatted_string = f"{int(seconds)} second{'s' if seconds != 1 else ''}"
     if minutes > 0:
-        formatted_string = f"{minutes} minute{'s' if minutes != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
+        formatted_string = f"{int(minutes)} minute{'s' if minutes != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
     if hours > 0:
-        formatted_string = f"{hours} hour{'s' if hours != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
+        formatted_string = f"{int(hours)} hour{'s' if hours != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
     if days > 0:
-        formatted_string = f"{days} day{'s' if days != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
+        formatted_string = f"{int(days)} day{'s' if days != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
     return formatted_string

@@ -113,8 +113,7 @@ class AddChoiceQuestion(AddQuestion):
     option_one_weight = IntegerField(
         "Option One Weight",
         validators = [
-            DataRequired(message="Option One Weight is required."),
-            NumberRange(min=0, max=100, message="Option One Weight must be between %(min)s and %(max)d.")])
+            NumberRange(min=-100, max=100, message="Option One Weight must be between %(min)s and %(max)d.")])
     option_two_text = TextAreaField(
         'Option Two Text', 
         validators=[
@@ -124,8 +123,7 @@ class AddChoiceQuestion(AddQuestion):
     option_two_weight = IntegerField(
         "Option Two Weight",
         validators = [
-            DataRequired(message="Option Two Weight is required."),
-            NumberRange(min=0, max=100, message="Option Two Weight must be between %(min)s and %(max)d.")])
+            NumberRange(min=-100, max=100, message="Option Two Weight must be between %(min)s and %(max)d.")])
     option_three_text = TextAreaField(
         'Option Three Text', 
         validators=[
@@ -135,8 +133,7 @@ class AddChoiceQuestion(AddQuestion):
     option_three_weight = IntegerField(
         "Option Three Weight",
         validators = [
-            DataRequired(message="Option Three Weight is required."),
-            NumberRange(min=0, max=100, message="Option Three Weight must be between %(min)s and %(max)d.")])
+            NumberRange(min=-100, max=100, message="Option Three Weight must be between %(min)s and %(max)d.")])
     option_four_text = TextAreaField(
         'Option Four Text', 
         validators=[
@@ -146,8 +143,7 @@ class AddChoiceQuestion(AddQuestion):
     option_four_weight = IntegerField(
         "Option Four Weight",
         validators = [
-            DataRequired(message="Option Four Weight is required."),
-            NumberRange(min=0, max=100, message="Option Four Weight must be between %(min)s and %(max)d.")])
+            NumberRange(min=-100, max=100, message="Option Four Weight must be between %(min)s and %(max)d.")])
     
 class AddApplicant(FlaskForm):
     email = StringField('Email', validators=[

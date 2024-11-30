@@ -231,8 +231,9 @@ class Assignments(db.Model):
             "possible_points":0,
             "possible_points_graded_only":0,
         }
+        for question in self.quiz.get_ordered_questions():
+            results["possible_points"] += question.possible_points
         for answer in self.answers:
-            results["possible_points"] += answer.possible_points
             # If the question is not yet graded.
             if answer.awarded_points is None:
                 results["ungraded_count"] += 1

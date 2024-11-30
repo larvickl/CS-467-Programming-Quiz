@@ -2,7 +2,7 @@ from flask import url_for
 from programming_quiz_web_app import db
 import datetime as dt
 from programming_quiz_web_app.models import Users, Quizzes, FreeResponseQuestions, ChoiceQuestions, Options, Assignments, Applicants
-
+from programming_quiz_web_app.main.urls import generate_quiz_url_and_pin
 
 def seed_data():
     """
@@ -129,8 +129,10 @@ def seed_data():
         quiz_id=quiz1.id
     )
     options1 = [
-        Options(option_text="A Python web framework.", option_weight=1, order=1, question=mc_question1),
-        Options(option_text="A JavaScript library.", option_weight=0, order=2, question=mc_question1)
+        Options(option_text="A Python web framework.", option_weight=100, order=1, question=mc_question1),
+        Options(option_text="A JavaScript library.", option_weight=0, order=2, question=mc_question1),
+        Options(option_text="A C++ library.", option_weight=0, order=3, question=mc_question1),
+        Options(option_text="A PhP library.", option_weight=0, order=4, question=mc_question1)
     ]
 
     mc_question2 = ChoiceQuestions(
@@ -144,7 +146,7 @@ def seed_data():
     )
     options2 = [
         Options(option_text="True", option_weight=0, order=1, question=mc_question2),
-        Options(option_text="False", option_weight=1, order=2, question=mc_question2)
+        Options(option_text="False", option_weight=100, order=2, question=mc_question2)
     ]
 
     mc_question3 = ChoiceQuestions(
@@ -157,9 +159,10 @@ def seed_data():
         quiz_id=quiz1.id
     )
     options3 = [
-    Options(option_text="The number of elements in an iterable.", option_weight=1, order=1, question=mc_question3),
+    Options(option_text="The number of elements in an iterable.", option_weight=100, order=1, question=mc_question3),
     Options(option_text="The data type of an object.", option_weight=0, order=2, question=mc_question3),
-    Options(option_text="The memory address of an object.", option_weight=0, order=3, question=mc_question3)
+    Options(option_text="The memory address of an object.", option_weight=0, order=3, question=mc_question3),
+    Options(option_text="CATS!", option_weight=0, order=4, question=mc_question3)
     ]
 
     mc_question4 = ChoiceQuestions(
@@ -174,7 +177,8 @@ def seed_data():
     options4 = [
     Options(option_text="GET", option_weight=0, order=1, question=mc_question4),
     Options(option_text="POST", option_weight=0, order=2, question=mc_question4),
-    Options(option_text="PUT", option_weight=1, order=3, question=mc_question4)
+    Options(option_text="PUT", option_weight=100, order=3, question=mc_question4),
+    Options(option_text="PATCH", option_weight=0, order=4, question=mc_question4)
     ]
 
     mc_question5 = ChoiceQuestions(
@@ -188,7 +192,7 @@ def seed_data():
     )
     options5 = [
     Options(option_text="True", option_weight=0, order=1, question=mc_question5),
-    Options(option_text="False", option_weight=1, order=2, question=mc_question5)
+    Options(option_text="False", option_weight=100, order=2, question=mc_question5)
     ]
 
     mc_question6 = ChoiceQuestions(
@@ -202,7 +206,7 @@ def seed_data():
     )
     options6 = [
     Options(option_text="True", option_weight=0, order=1, question=mc_question6),
-    Options(option_text="False", option_weight=1, order=2, question=mc_question6)
+    Options(option_text="False", option_weight=100, order=2, question=mc_question6)
     ]
 
     # Add all questions and options.
@@ -215,6 +219,7 @@ def seed_data():
     db.session.add_all(options5)
     db.session.add_all(options6)
 
+    assignment_url, assignment_pin = generate_quiz_url_and_pin()
     # Create example assignments.
     assignment1 = Assignments(
         time_limit_seconds=3600,
@@ -223,13 +228,14 @@ def seed_data():
         submit_time=None,
         score=None,
         #url=url_generator('quiz.assignment', assignment_id=1, _external=True),
-        url="https://example.com/URL_TEST_ASSIGNMENT1",
-        url_pin="ABC123",
+        url=assignment_url,
+        url_pin=assignment_pin,
         assigned_by_id=user1.id,
         quiz_id=quiz1.id,
         applicant_id=applicant2.id
     )
 
+    assignment_url, assignment_pin = generate_quiz_url_and_pin()
     assignment2 = Assignments(
         time_limit_seconds=5400,
         expiry=dt.datetime(2024, 12, 25, 23, 59, 59, tzinfo=dt.timezone.utc),
@@ -237,8 +243,8 @@ def seed_data():
         submit_time=dt.datetime(2024, 11, 22, 16, 45, 0, tzinfo=dt.timezone.utc),
         score=85.5,
         #url=url_for('quiz.assignment', assignment_id=2, _external=True),
-        url="https://example.com/URL_TEST_ASSIGNMENT2",
-        url_pin="DEF456",
+        url=assignment_url,
+        url_pin=assignment_pin,
         assigned_by_id=user2.id,
         quiz_id=quiz2.id,
         applicant_id=applicant1.id

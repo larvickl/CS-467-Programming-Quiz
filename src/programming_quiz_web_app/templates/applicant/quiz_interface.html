@@ -22,12 +22,13 @@ Quiz in Progress
             <!-- Timer -->
             <div class="row">
                 <div class="col-12 timer">
-                    {{ remaining_time }} mins remaining
+                    {{ remaining_time |format_time_interval }} remaining
                 </div>
             </div>
 
             <!-- Current Question -->
-            <form id="quizForm" method="POST" action="{{ url_for('main.take_quiz', quiz_id=quiz.id) }}">
+            <form id="quizForm" method="POST" action="" novalidate>
+                {{ form.hidden_tag() }}
                 <input type="hidden" name="current_question" value="{{ current_question_number }}">
                 <div class="row">
                     <div class="col-12">
@@ -39,43 +40,55 @@ Quiz in Progress
                         </div>
 
                         <!-- Answer Section -->
-                        {% if question_type == 'choice' %}
-                        <div class="options-container">
-                            {% for option in current_question.options %}
-                            <div class="form-check mb-2">
-                                <input type="radio" id="option{{ loop.index }}"
-                                    name="question_{{ current_question.id }}" value="{{ option.id }}"
-                                    class="form-check-input answer-input" {% if selected_answer==option.id|string
-                                    %}checked{% endif %}>
-                                <label class="form-check-label" for="option{{ loop.index }}">
-                                    {{ option.option_text }}
-                                </label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        <div class="form-group">
-                            <textarea class="form-control" id="answer_text" rows="4"
-                                onchange="saveAnswer('{{ quiz.id }}', '{{ current_question.id }}', this.value)">{{ selected_answer }}</textarea>
-                        </div>
+                        {% if current_question.__tablename__ == "ChoiceQuestions" %}
+                            {% if current_question.question_type == "true-false" %}
+                                {% for subfield in form.tf_answer %}
+                                <div class="form-check">
+                                    <td>{{ subfield(class="form-check-input answer-input") }}</td>
+                                    {{ current_question.options[loop.index - 1].option_text}}
+                                </div>
+                                {% endfor %}
+                            {% elif current_question.question_type == "multiple-choice" %}
+                                {% for subfield in form.multi_choice_answer %}
+                                <div class="form-check">
+                                    <td>{{ subfield(class="form-check-input answer-input") }}</td>
+                                    {{ current_question.options[loop.index - 1].option_text}}
+                                </div>
+                                {% endfor %}
+                            {% elif current_question.question_type == "multiple-selection" %}
+                                <div class="form-check">
+                                    {{form.multi_select_answer_one(class="form-check-input")}}
+                                    {{ current_question.options[0].option_text}}
+                                </div>
+                                <div class="form-check">
+                                    {{form.multi_select_answer_two(class="form-check-input")}}
+                                    {{ current_question.options[1].option_text}}
+                                </div>
+                                <div class="form-check">
+                                    {{form.multi_select_answer_three(class="form-check-input")}}
+                                    {{ current_question.options[2].option_text}}
+                                </div>
+                                <div class="form-check">
+                                    {{form.multi_select_answer_four(class="form-check-input")}}
+                                    {{ current_question.options[3].option_text}}
+                                </div>
+                            {% endif %}
+                            {% else %}{# Free response question. #}
+                                {{form.free_response_answer(class="form-control", id="answer_text", rows="4")}}
                         {% endif %}
 
                         <!-- Navigation Buttons -->
                         <div class="row mt-4">
                             <div class="col-12 navigation-buttons">
-                                {% if has_previous %}
-                                <a href="{{ url_for('main.take_quiz', quiz_id=quiz.id, action='previous', current=current_question_number) }}"
-                                    class="btn btn-dark">Previous</a>
+                                {#{% if has_previous %}
+                                    {{ form.previous(class="btn btn-dark")}}
                                 {% else %}
                                 <button class="btn btn-dark" disabled>Previous</button>
-                                {% endif %}
-
+                                {% endif %}#}
                                 {% if has_next %}
-                                <a href="{{ url_for('main.take_quiz', quiz_id=quiz.id, action='next', current=current_question_number) }}"
-                                    class="btn btn-dark">Next</a>
+                                    {{ form.next(class="btn btn-dark")}}
                                 {% else %}
-                                <a href="{{ url_for('main.confirm_submit_quiz', id=quiz.id) }}"
-                                    class="btn btn-dark">Submit</a>
+                                    {{ form.submit(class="btn btn-dark")}}
                                 {% endif %}
                             </div>
                         </div>
@@ -90,10 +103,6 @@ Quiz in Progress
                                             <span class="page-link">{{ i }}</span>
                                         </li>
                                         {% endfor %}
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                                href="{{ url_for('main.confirm_submit_quiz', id=quiz.id) }}">Submit</a>
-                                        </li>
                                     </ul>
                                 </nav>
                             </div>
