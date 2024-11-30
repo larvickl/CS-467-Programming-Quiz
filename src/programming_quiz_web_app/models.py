@@ -203,6 +203,44 @@ class Assignments(db.Model):
     assigned_by: Mapped["Users"] = db.relationship("Users", back_populates="assignments")
     quiz: Mapped["Quizzes"] = db.relationship("Quizzes", back_populates="assignments")
     answers: Mapped[List["Answers"]] = db.relationship("Answers", back_populates="assignment")
+    # Methods
+    def is_graded(self) -> bool:
+        """Return True if all questions graded, False otherwise.
+
+        Returns
+        -------
+        bool
+            True if all questions graded, False otherwise
+        """
+        for answer in self.answers:
+            if answer.awarded_points is None:
+                return False
+        return True
+    
+    def get_results(self) -> dict[str, int | float]:
+        """Get the results of the quiz.
+
+        Returns
+        -------
+        dict[str, int | float]
+            Get the results of the quiz.
+        """
+        results = {
+            "ungraded_count": 0,
+            "total_score": 0,
+            "possible_points":0,
+            "possible_points_graded_only":0,
+        }
+        for answer in self.answers:
+            results["possible_points"] += answer.possible_points
+            # If the question is not yet graded.
+            if answer.awarded_points is None:
+                results["ungraded_count"] += 1
+            else:  # The question is graded.
+                results["possible_points_graded_only"] += answer.possible_points
+                results["total_score"] += answer.awarded_points
+        return results
+                
 
 
 class Answers(db.Model):
