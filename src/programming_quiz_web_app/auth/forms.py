@@ -83,4 +83,44 @@ class LoginForm(FlaskForm):
     ])
     
     submit = SubmitField('Log In')
+
+class PasswordResetRequestForm(FlaskForm):
+    """Validate the password reset request form submission.
     
+    Attributes
+    ----------
+    email : StringField
+        User's email with validation rules
+    submit : SubmitField
+        Form submission button
+    """
+    email = StringField('Email', validators=[
+        DataRequired(message="Email is required"),
+        Email(message="Please enter a valid email address"),
+        Length(max=300, message='Email must be less than 300 characters')
+    ])
+    
+    submit = SubmitField('Request Password Reset')
+
+class PasswordResetForm(FlaskForm):
+    """Validate the password reset form submission.
+    
+    Attributes
+    ----------
+    password : PasswordField
+        User's new password with validation rules
+    confirm_password : PasswordField
+        Password confirmation field
+    submit : SubmitField
+        Form submission button
+    """
+    password = PasswordField('New Password', validators=[
+        DataRequired(),
+        Length(min=8, message='Password must be at least 8 characters long')
+    ])
+    confirm_password = PasswordField('Confirm Password', validators=[
+        DataRequired(),
+        EqualTo('password', message='Passwords must match')
+    ])
+    
+    submit = SubmitField('Reset Password')

@@ -33,9 +33,12 @@ dependencies = [
     "Flask-Migrate",
     "Flask-WTF[email]",
     "Flask-Talisman",
+    "Flask-JWT-Extended",
+    "Flask-Login",
     "SQLAlchemy",
     "mysql-connector-python",
     'bleach[css]',
+    "PyJWT"
 ]
 dynamic = ["version"]
 

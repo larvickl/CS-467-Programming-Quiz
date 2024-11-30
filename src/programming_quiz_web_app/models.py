@@ -3,7 +3,8 @@ import sqlalchemy.types as types
 from sqlalchemy.dialects.mysql import TEXT, MEDIUMTEXT, LONGTEXT
 from sqlalchemy.orm import Mapped
 from typing import Optional, List
-from programming_quiz_web_app import db
+from programming_quiz_web_app import db, login_manager
+from flask_login import UserMixin
 
 class TZDateTime(types.TypeDecorator):
     """A database column type that enforces correct time zones.  Aware datetimes
@@ -37,15 +38,7 @@ users_permissions = db.Table(
     db.Column("permission_id", db.ForeignKey("Permissions.id"), primary_key=True)
 )
 
-# The ApplicantsAssignments association table.
-applicants_assignments = db.Table(
-    "ApplicantsAssignments",
-    db.Model.metadata,
-    db.Column("applicant_id", db.ForeignKey("Applicants.id"), primary_key=True),
-    db.Column("assignment_id", db.ForeignKey("Assignments.id"), primary_key=True)
-)
-
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     """The schema for the Users table."""
     __tablename__ = 'Users'
     # Columns.
@@ -92,7 +85,7 @@ class Quizzes(db.Model):
     name: Mapped[str] = db.mapped_column(db.String(300), unique=True, index=True)
     description: Mapped[Optional[str]] = db.mapped_column(MEDIUMTEXT)
     default_time_limit_seconds: Mapped[int] = db.mapped_column(db.Integer())
-    time_created: Mapped[dt.datetime] = db.mapped_column(TZDateTime, index=True, default=dt.datetime.now(dt.timezone.utc).replace(tzinfo=None))
+    time_created: Mapped[dt.datetime] = db.mapped_column(TZDateTime, index=True, default=dt.datetime.now(dt.timezone.utc))
     # Foreign keys.
     created_by_id: Mapped[int] = db.mapped_column(
         db.Integer(),
@@ -100,8 +93,36 @@ class Quizzes(db.Model):
     # Relationships.
     created_by: Mapped["Users"] = db.relationship("Users", back_populates="quizzes")
     assignments: Mapped[List["Assignments"]] = db.relationship("Assignments", back_populates="quiz")
-    choice_questions: Mapped[List["ChoiceQuestions"]] = db.relationship("ChoiceQuestions", back_populates="quiz")
-    free_response_questions: Mapped[List["FreeResponseQuestions"]] = db.relationship("FreeResponseQuestions", back_populates="quiz")
+    choice_questions: Mapped[List["ChoiceQuestions"]] = db.relationship("ChoiceQuestions", back_populates="quiz", order_by="ChoiceQuestions.id")
+    free_response_questions: Mapped[List["FreeResponseQuestions"]] = db.relationship("FreeResponseQuestions", back_populates="quiz", order_by="FreeResponseQuestions.id")
+    # Methods
+    def get_ordered_questions(self):
+        """Get all questions ordered by "order".
+
+            Returns
+            -------
+            list[ChoiceQuestions, FreeResponseQuestions]
+                A list containing the ordered questions.
+        """
+        def get_order(entry: ChoiceQuestions | FreeResponseQuestions) -> int:
+            """A function to get the order of a ChoiceQuestion or a FreeResponseQuestion for sorting.
+
+            Parameters
+            ----------
+            entry : ChoiceQuestions | FreeResponseQuestions
+                The item to get the order of.
+
+            Returns
+            -------
+            int
+                The question order.
+            """
+            return entry.order
+        
+        # Get all questions.
+        all_questions = self.choice_questions + self.free_response_questions
+        all_questions.sort(key=get_order)
+        return all_questions
 
 
 class FreeResponseQuestions(db.Model):
@@ -174,11 +195,14 @@ class Assignments(db.Model):
     quiz_id: Mapped[int] = db.mapped_column(
         db.Integer(),
         db.ForeignKey("Quizzes.id", ondelete='RESTRICT', onupdate="CASCADE"))
+    applicant_id: Mapped[int] = db.mapped_column(
+        db.Integer(),
+        db.ForeignKey("Applicants.id", ondelete='RESTRICT', onupdate="CASCADE"))
     # Relationships.
+    applicant: Mapped["Applicants"] = db.relationship("Applicants", back_populates="assignments")
     assigned_by: Mapped["Users"] = db.relationship("Users", back_populates="assignments")
     quiz: Mapped["Quizzes"] = db.relationship("Quizzes", back_populates="assignments")
     answers: Mapped[List["Answers"]] = db.relationship("Answers", back_populates="assignment")
-    applicants: Mapped[List["Applicants"]] = db.relationship(secondary=applicants_assignments, back_populates="assignments")
 
 
 class Answers(db.Model):
@@ -209,4 +233,20 @@ class Applicants(db.Model):
     given_name: Mapped[str] = db.mapped_column(db.String(100))  
     timezone: Mapped[str] = db.mapped_column(db.String(100))
     # Relationship.
-    assignments: Mapped[List["Assignments"]] = db.relationship(secondary=applicants_assignments, back_populates="applicants")
+    assignments: Mapped[List["Assignments"]] = db.relationship("Assignments", back_populates="applicant")
+
+@login_manager.user_loader
+def load_user(id: int | str) -> Users | None:
+    """Return a user given the user's ID.
+
+    Parameters
+    ----------
+    id : int | str
+        The user's ID.
+
+    Returns
+    -------
+    Users | None
+        The user with the given ID, or None if no such user can be found.
+    """
+    return Users.query.get(int(id))

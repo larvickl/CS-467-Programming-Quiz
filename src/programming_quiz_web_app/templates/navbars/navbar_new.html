@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-custom">
+<nav class="navbar navbar-expand-lg {% if current_user.is_anonymous %}navbar-light bg-light{% else %}navbar-custom{% endif %}">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('main.index') }}">Logo</a>
 
@@ -10,17 +10,24 @@
         <!-- Navbar links -->
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav1">
             <ul class="navbar-nav">
+                {% if current_user.is_anonymous %}
+                <li class="nav-item"><a class="nav-link" href="#">Explore</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Solutions</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+                {% else %}
                 <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Quizzes</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Candidates</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Analytics</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+                {% endif %}
             </ul>
         </div>
 
 
         <div class="d-flex ms-auto align-items-center">
+            {% if current_user.is_anonymous %}
+            <a class="nav-link mb-0 me-2" href="{{ url_for('auth.login') }}">Login</a>
+            <a class="btn btn-dark" href="{{ url_for('auth.register') }}">Sign Up</a>
+            {% else %}
             <a class="btn btn-dark" href="{{ url_for('auth.logout') }}">Log out</a>
+            {% endif %}
         </div>
     </div>
 </nav>
