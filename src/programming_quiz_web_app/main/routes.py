@@ -159,9 +159,13 @@ def save_answer(question: ChoiceQuestions | FreeResponseQuestions, assignment: A
             answer = f"{answer_options} # {answer_text}"
             score = max(0, score)
         else:  # Score true/ false or multiple choice questions.
-            option = question.options[int(form.multi_choice_answer.data)]
-            score = (option.option_weight / 100) * question.possible_points
-            answer = f"{form.multi_choice_answer.data} # {option.option_text}"
+            if form.multi_choice_answer.data:
+                option = question.options[int(form.multi_choice_answer.data)]
+                score = (option.option_weight / 100) * question.possible_points
+                answer = f"{form.multi_choice_answer.data} # {option.option_text}"
+            else:
+                score = 0
+                answer = '#EMPTY'
     else:  # Free response.
         answer = form.free_response_answer.data
         score = None
@@ -198,7 +202,7 @@ def get_assignment_remaining_time(assignment: Assignments) -> float | int:
         The remaining time, in seconds.
     """
     if assignment.time_limit_seconds < 0:
-        return (expiry - dt.datetime.now(dt.timezone.utc)).total_seconds()
+        return (assignment.expiry - dt.datetime.now(dt.timezone.utc)).total_seconds()
     now = dt.datetime.now(dt.timezone.utc)
     expiry = assignment.expiry
     start_time = assignment.start_time
