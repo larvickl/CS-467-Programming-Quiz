@@ -1,5 +1,6 @@
 from flask import render_template, send_from_directory, flash, redirect, url_for, request, session
 from programming_quiz_web_app.main import bp
+from programming_quiz_web_app.main.forms import StartQuizForm, QuizQuestionForm
 from programming_quiz_web_app.models import *
 
 @bp.route('/index')
@@ -194,4 +195,60 @@ def test_quiz():
         has_next=has_next,
         pagination_pages=pagination_pages
     )
+
+@bp.route('/quiz/begin/<url_id>', methods=['GET', 'POST'])
+def start_quiz(url_id):
+    # Instantiate form.
+    form = StartQuizForm()
+    # Locate the assignment.
+    assignment = Assignments.query.filter_by(url = url_id).first()
+    # PIN entered.
+    if assignment is not None and form.validate_on_submit():
+        if form.quiz_pin.data == assignment.url_pin:
+            flash("Good Luck!  Your quiz has now started!", "success")
+            return redirect(url_for("main.do_quiz", url_id=url_id, pin=assignment.url_pin))
+        else:
+            flash("The entered PIN was invalid.  Please try again!", "danger")
+    return render_template("applicant/start_quiz.html", assignment=assignment, form=form)
+
+@bp.route('/quiz/take/<url_id>', methods=['GET', 'POST'])
+def do_quiz(url_id):
+    quiz_pin: str = request.args.get('pin', None, type=str)
+    current_question_ix = request.args.get('ix', 0, type=int)
+    # Lookup the assignment.
+    assignment = Assignments.query.filter_by(url = url_id).first()
+    if assignment is None:
+        flash("Invalid quiz!", "danger")
+        redirect(url_for('main.index'))
+    # Confirm that the pin is correct.
+    if quiz_pin != assignment.url_pin:
+        flash("Invalid PIN!", "danger")
+        redirect(url_for('main.index'))
+    # Instantiate the form.
+    form = QuizQuestionForm()
+    # Get all questions.
+    questions = assignment.quiz.get_ordered_questions()
+    if len(questions) == 0:
+        flash("Your quiz had no questions.  I guess you're done?", "danger")
+        return redirect(url_for('main.index'))
+    # Check that the given question index is valid.
+    if current_question_ix > len(questions):
+        flash("Invalid question number", "danger")
+        current_question_ix = 0
+    return render_template(
+        'applicant/quiz_interface.html',
+        quiz=assignment.quiz,
+        current_question=questions[current_question_ix],
+        current_question_number=current_question_ix + 1,
+        total_questions=len(questions),
+        has_previous=current_question_ix > 0,
+        has_next=current_question_ix < len(questions) - 1,
+        remaining_time=10,
+        selected_answer=None,
+        instructions=assignment.quiz.description,
+        form=form,
+        quiz_pin=quiz_pin,
+        url_id=url_id,
+)
+
 
