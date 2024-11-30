@@ -254,6 +254,7 @@ class Answers(db.Model):
     answer: Mapped[Optional[str]] = db.mapped_column(MEDIUMTEXT)
     possible_points: Mapped[float] = db.mapped_column(db.Double)
     awarded_points: Mapped[Optional[float]] = db.mapped_column(db.Double)
+    question_id: Mapped[int] = db.mapped_column(db.Integer())
     # Foreign keys.
     assignment_id: Mapped[int] = db.mapped_column(
         db.Integer(),
