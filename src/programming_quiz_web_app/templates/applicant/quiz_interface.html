@@ -22,7 +22,7 @@ Quiz in Progress
             <!-- Timer -->
             <div class="row">
                 <div class="col-12 timer">
-                    {{ remaining_time |format_time_interval }} remaining
+                    <span id="quiz_timer">{{ remaining_time |format_time_interval }}</span> remaining
                 </div>
             </div>
 
@@ -113,4 +113,31 @@ Quiz in Progress
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function updateTimer(){
+    while (true){
+        //try {
+            const timer = document.getElementById("quiz_timer");
+            const response = await fetch("{{ url_for('main.fetch_remaining_time', assignment_id=assignment.id) }}");
+            if (response.status === 200) {
+                const response_body = await response.json();
+                timer.innerText = response_body.remaining_time
+            } else {
+                console.error(`Failed to fetch the remaining time.  Status code:  ${response.status}`);
+            }
+        //} catch {
+        //    console.error("Failed to fetch the remaining time.");
+        //}
+        await delay(10000);
+    }
+}
+
+updateTimer();
+</script>
 {% endblock %}
