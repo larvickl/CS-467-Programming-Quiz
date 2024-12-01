@@ -4,8 +4,9 @@ from programming_quiz_web_app.employer import bp
 import datetime as dt
 from programming_quiz_web_app.models import *
 from programming_quiz_web_app.employer.forms import QuizDetailsForm, AddFreeResponseQuestion, AddTrueFalseQuestion, AddChoiceQuestion
-from programming_quiz_web_app.employer.forms import AddApplicant, AssignQuiz
+from programming_quiz_web_app.employer.forms import AddApplicant, AssignQuiz, GradeAnswerForm
 from programming_quiz_web_app.main.urls import generate_quiz_url_and_pin
+from programming_quiz_web_app.utilities.emails import send_quiz_assigned_email
 from programming_quiz_web_app import db
 
 
@@ -326,14 +327,17 @@ def assign_quiz():
             assigned_by_id = current_user.id,
             quiz_id = int(form.quiz.data),
             applicant_id = int(form.applicant.data))
+        applicant_email = Applicants.query.get(int(form.applicant.data)).email
         try:
             db.session.add(new_assignment)
             db.session.commit()
             flash("Quiz assigned!", 'success')
+            send_quiz_assigned_email(applicant_email, new_assignment)
+            flash("Email sent to applicant!", 'success')
             return redirect(url_for('employer.dashboard'))
         except Exception as the_exception:
             db.session.rollback()
-            flash("Unable to assign quiz!", 'danger')
+            flash("Unable to assign quiz or sending email!", 'danger')
             current_app.logger.exception(the_exception)
     return render_template("employer/assign_quiz.html", form=form)
 
@@ -350,7 +354,7 @@ def quiz_results(quiz_id):
         # Calculate statistics
         total_attempts = len(assignments)
         if total_attempts > 0:
-            total_score = sum(assignment.get_results()["total_score"] for assignment in assignments)
+            total_score = sum((assignment.get_results()["total_score"]/assignment.get_results()["possible_points"])*100 for assignment in assignments)
             average_score = round(total_score / total_attempts, 1)
             completion_rate = round((len(assignments) / Assignments.query.filter_by(quiz_id=quiz_id).count()) * 100, 1)
             
@@ -368,12 +372,20 @@ def quiz_results(quiz_id):
         # Format results
         results = []
         for assignment in assignments:
+            # Make grading string.
+            if assignment.is_graded():
+                grade_elem = ""
+            else:
+                grade_url = url_for('employer.grade_assignment', assignment_id=assignment.id)
+                grade_elem = f'<a href="{grade_url}" class="quiz-link">Click</a>'
+            # Append results.
             results.append({
                 'id': assignment.id,
                 'name': f"{assignment.applicant.given_name} {assignment.applicant.surname}",
                 'score': (assignment.get_results()["total_score"] / assignment.get_results()["possible_points"])*100,
                 'timeTaken': (assignment.submit_time - assignment.start_time).total_seconds() / 60,
-                'completionDate': assignment.submit_time.strftime("%Y-%m-%d %H:%M")
+                'completionDate': assignment.submit_time.strftime("%Y-%m-%d %H:%M"),
+                'gradeElem': grade_elem
             })
         
         # Sort by score descending
@@ -391,3 +403,35 @@ def quiz_results(quiz_id):
     except Exception as e:
         current_app.logger.exception(e)
         return jsonify({'error': "There was an error fetching the requested data.  Please see the error log for more information."}), 500
+    
+@bp.route('/employer/quiz/<int:assignment_id>/grade', methods=['GET', 'POST'])
+@login_required
+def grade_assignment(assignment_id):
+    # Look up the quiz.
+    assignment = Assignments.query.get(assignment_id)
+    if assignment is None:
+        flash("Assignment not found", "danger")
+        return redirect(url_for('employer.dashboard'))
+    # Get all ungraded questions.
+    ungraded_answers = assignment.get_ungraded_questions()
+    if len(ungraded_answers) < 1:
+        flash("This assignment has no ungraded questions", "success")
+        return redirect(url_for('employer.dashboard'))
+    # Instantiate Form.
+    form = GradeAnswerForm(answer_id=ungraded_answers[0].id)
+    if form.validate_on_submit():
+        # Locate the answer.
+        answer = Answers.query.get(int(form.answer_id.data))
+        if answer is None:
+            flash("There was an error locating the answer in the database.  Please try again.", "danger")
+            return redirect(url_for('employer.grade_assignment', assignment_id=assignment.id))
+        # Save the graded points total.
+        try:
+            answer.awarded_points = float(form.awarded_points.data)
+            db.session.commit()
+            flash("Score saved!", "success")
+            return redirect(url_for('employer.grade_assignment', assignment_id=assignment.id))
+        except:
+            db.session.rollback()
+            flash("There was a problem saving the score!  Please try again.", "danger")
+    return render_template("employer/grade_assignment.html", form=form, assignment=assignment, ungraded_answer=ungraded_answers[0])

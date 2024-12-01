@@ -1,7 +1,8 @@
-from flask import render_template, send_from_directory, flash, redirect, url_for, request, session, current_app
+from flask import render_template, send_from_directory, flash, redirect, url_for, request, session, current_app, jsonify
 from flask_wtf import FlaskForm
 from programming_quiz_web_app.main import bp
 from programming_quiz_web_app.main.forms import StartQuizForm, QuizQuestionForm
+from programming_quiz_web_app.utilities.emails import send_quiz_submitted_email
 from programming_quiz_web_app.models import *
 
 @bp.route('/index')
@@ -45,6 +46,13 @@ def start_quiz(url_id):
         else:
             flash("The entered PIN was invalid.  Please try again!", "danger")
     return render_template("applicant/start_quiz.html", assignment=assignment, form=form)
+
+@bp.route('/quiz/get_time/<assignment_id>')
+def fetch_remaining_time(assignment_id):
+    assignment = Assignments.query.get(assignment_id)
+    if assignment is None:
+        return jsonify({"error":"Unable to find ID"})
+    return jsonify({"remaining_time": get_formatted_get_assignment_remaining_time(assignment)})
 
 @bp.route('/quiz/take/<url_id>', methods=['GET', 'POST'])
 def do_quiz(url_id):
@@ -95,6 +103,11 @@ def do_quiz(url_id):
                 current_app.logger.exception(the_exception)
                 db.session.rollback()
                 flash("There was an error submitting your quiz.", "danger")
+            try:
+                send_quiz_submitted_email(assignment.applicant.email, assignment, email_cc=assignment.assigned_by.email)
+            except Exception as the_exception:
+                current_app.logger.exception(the_exception)
+                flash("There was an error sending the confirmation email.", "danger")
             return redirect(url_for("main.index"))
         # Next question
         if form.next.data is True:
@@ -102,6 +115,7 @@ def do_quiz(url_id):
     return render_template(
         'applicant/quiz_interface.html',
         quiz=assignment.quiz,
+        assignment=assignment,
         current_question_ix=current_question_ix,
         current_question=questions[current_question_ix],
         current_question_number=current_question_ix + 1,
@@ -210,3 +224,34 @@ def get_assignment_remaining_time(assignment: Assignments) -> float | int:
     due_time = min((start_time + dt.timedelta(seconds=time_limit_seconds)), expiry)
     remaining_time = (due_time - now).total_seconds()
     return remaining_time
+
+def get_formatted_get_assignment_remaining_time(assignment: Assignments) -> str:
+    """Get the amount of time remaining for a specific assignment.  Find the 
+    minimum time before either the expiry or the time limit has elapsed.  Formatted
+    as a string.
+
+    Parameters
+    ----------
+    assignment : Assignments
+        The assignment to find the remaining time for.
+
+    Returns
+    -------
+    str
+        The remaining time.
+    """
+    remaining_time_seconds = get_assignment_remaining_time(assignment)
+    days, remainder = divmod(remaining_time_seconds, 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    # Format the string.
+    formatted_string = ""
+    if seconds > 0:
+        formatted_string = f"{int(seconds)} second{'s' if seconds != 1 else ''}"
+    if minutes > 0:
+        formatted_string = f"{int(minutes)} minute{'s' if minutes != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
+    if hours > 0:
+        formatted_string = f"{int(hours)} hour{'s' if hours != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
+    if days > 0:
+        formatted_string = f"{int(days)} day{'s' if days != 1 else ''}{', ' if len(formatted_string) > 0 else ''}" + formatted_string
+    return formatted_string

@@ -42,8 +42,8 @@ class App_Config:
         "force_https": True,
         "content_security_policy":{
             "default-src":["'self'", "data:"],
-            "script-src":["'self'", "https://cdn.jsdelivr.net"],
-            "style-src":["'self'", "https://cdn.jsdelivr.net"],
+            "script-src":["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+            "style-src":["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
         },
     }
 

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, SubmitField, DecimalField, IntegerField, DateTimeLocalField
+from wtforms import StringField, SelectField, TextAreaField, SubmitField, DecimalField, IntegerField, DateTimeLocalField, HiddenField
 from wtforms.validators import DataRequired, Length, NumberRange, Email
 from wtforms import ValidationError
 from programming_quiz_web_app.models import Quizzes 
@@ -171,3 +171,11 @@ class AssignQuiz(FlaskForm):
     quiz = SelectField('Quiz', choices=[('', 'Select a quiz')], validators=[DataRequired()])
     expiry = DateTimeLocalField("Expiry", validators=[DataRequired()])
     submit = SubmitField('Assign Quiz!')
+
+class GradeAnswerForm(FlaskForm):
+    awarded_points = DecimalField(
+        "Awarded Points",
+        validators = [
+            NumberRange(min=0, message="Awarded points must be greater than or equal to %(min)s.")])
+    answer_id = HiddenField("Answer ID")
+    submit = SubmitField('Award Points!')

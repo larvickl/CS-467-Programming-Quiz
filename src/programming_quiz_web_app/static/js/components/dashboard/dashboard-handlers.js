@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <th scope="col">Name</th>
                                     <th scope="col" class="text-center">Score</th>
                                     <th scope="col" class="text-center">Completion time</th>
+                                    <th scope="col" class="text-center">Grade</th>
                                     <th scope="col" class="text-end">Date</th>
                                 </tr>
                             </thead>
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <td>${result.name}</td>
                                         <td class="text-center fw-bold">${result.score}%</td>
                                         <td class="text-center">${result.timeTaken}</td>
+                                        <td class="text-center">${result.gradeElem}</td>
                                         <td class="text-end">${result.completionDate}</td>
                                     </tr>
                                 `).join('')}
