@@ -58,13 +58,13 @@ class App_Config:
     APP_ALL_TIMEZONES = all_time_zones
 
     # SMTP config.
-    SMTP_SERVER = "smtp.example.com"
+    SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 465
     SMTP_SSL = True
-    SMTP_USERNAME = "example"
-    SMTP_PASSWORD = "example"
-    SMTP_FROM = Address("SPQ NO REPLY", "noreply", "example.com")
-    CONTACT_EMAIL_ADDRESS = "example@example.com"
+    SMTP_USERNAME = "capstoneprogrammingquiz@gmail.com" # Created email address, up to 500 emails per day
+    SMTP_PASSWORD = "bnsx ezrz adqq qywl" # Google App Password
+    SMTP_FROM = Address("SPQ NO REPLY", "noreply", "gmail.com")
+    CONTACT_EMAIL_ADDRESS = "capstoneprogrammingquiz@gmail.com" 
 
     # Vite Config.
     VITE_MODE = "production"

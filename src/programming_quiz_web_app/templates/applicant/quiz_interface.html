@@ -21,8 +21,13 @@ Quiz in Progress
         <div class="col-md-9 main-content">
             <!-- Timer -->
             <div class="row">
-                <div class="col-12 timer">
-                    {{ remaining_time |format_time_interval }} remaining
+                <div class="col-12 text-center">
+                    <h4 id="timer">
+                        Time Remaining: 
+                        <span id="time-remaining">
+                            {{ remaining_time | format_time_interval }}
+                        </span>
+                    </h4>
                 </div>
             </div>
 
