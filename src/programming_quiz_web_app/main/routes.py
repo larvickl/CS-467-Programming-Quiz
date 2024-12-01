@@ -2,6 +2,7 @@ from flask import render_template, send_from_directory, flash, redirect, url_for
 from flask_wtf import FlaskForm
 from programming_quiz_web_app.main import bp
 from programming_quiz_web_app.main.forms import StartQuizForm, QuizQuestionForm
+from programming_quiz_web_app.utilities.emails import send_quiz_submitted_email
 from programming_quiz_web_app.models import *
 
 @bp.route('/index')
@@ -102,6 +103,11 @@ def do_quiz(url_id):
                 current_app.logger.exception(the_exception)
                 db.session.rollback()
                 flash("There was an error submitting your quiz.", "danger")
+            try:
+                send_quiz_submitted_email(assignment.applicant.email, assignment, email_cc=assignment.assigned_by.email)
+            except Exception as the_exception:
+                current_app.logger.exception(the_exception)
+                flash("There was an error sending the confirmation email.", "danger")
             return redirect(url_for("main.index"))
         # Next question
         if form.next.data is True:

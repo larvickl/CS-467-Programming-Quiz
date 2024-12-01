@@ -6,6 +6,7 @@ from programming_quiz_web_app.models import *
 from programming_quiz_web_app.employer.forms import QuizDetailsForm, AddFreeResponseQuestion, AddTrueFalseQuestion, AddChoiceQuestion
 from programming_quiz_web_app.employer.forms import AddApplicant, AssignQuiz, GradeAnswerForm
 from programming_quiz_web_app.main.urls import generate_quiz_url_and_pin
+from programming_quiz_web_app.utilities.emails import send_quiz_assigned_email
 from programming_quiz_web_app import db
 
 
@@ -326,14 +327,17 @@ def assign_quiz():
             assigned_by_id = current_user.id,
             quiz_id = int(form.quiz.data),
             applicant_id = int(form.applicant.data))
+        applicant_email = Applicants.query.get(int(form.applicant.data)).email
         try:
             db.session.add(new_assignment)
             db.session.commit()
             flash("Quiz assigned!", 'success')
+            send_quiz_assigned_email(applicant_email, new_assignment)
+            flash("Email sent to applicant!", 'success')
             return redirect(url_for('employer.dashboard'))
         except Exception as the_exception:
             db.session.rollback()
-            flash("Unable to assign quiz!", 'danger')
+            flash("Unable to assign quiz or sending email!", 'danger')
             current_app.logger.exception(the_exception)
     return render_template("employer/assign_quiz.html", form=form)
 

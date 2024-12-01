@@ -118,7 +118,7 @@ def send_quiz_assigned_email(
     else:
         time_limit_string = f"{seconds} seconds"
     # Make URL:
-    quiz_url = f'{url_for("main.confirm_start_quiz", _external=True)}/{assignment.url}'
+    quiz_url = f'{url_for("main.start_quiz", url_id=assignment.url , _external=True)}'
     # Generate ASCII email body.
     ascii_email = render_template(
         "emails/quiz_assigned.txt",
@@ -165,7 +165,7 @@ def send_quiz_submitted_email(
         the email is not BCC'd to anyone, by default None
     """
     # Email subject.
-    subject = "Quiz Assigned - Software Programming Quiz"
+    subject = "Quiz Submitted - Software Programming Quiz"
     # Quiz Assigned by.
     assigned_by = assignment.assigned_by
     # Format due date.
