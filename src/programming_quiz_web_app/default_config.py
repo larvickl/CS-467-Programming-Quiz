@@ -62,7 +62,7 @@ class App_Config:
     SMTP_PORT = 465
     SMTP_SSL = True
     SMTP_USERNAME = "capstoneprogrammingquiz@gmail.com" # Created email address, up to 500 emails per day
-    SMTP_PASSWORD = "bnsx ezrz adqq qywl" # Google App Password
+    SMTP_PASSWORD = "wrvm lzjt plzq dqzw" # Google App Password
     SMTP_FROM = Address("SPQ NO REPLY", "noreply", "gmail.com")
     CONTACT_EMAIL_ADDRESS = "capstoneprogrammingquiz@gmail.com" 
 
