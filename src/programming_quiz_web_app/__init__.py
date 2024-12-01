@@ -69,9 +69,6 @@ def create_app(app_config_env_var: str = "FLASK_APP_CONFIG", app_config_prefix: 
     # Initialize Flask-Talisman
     talisman.init_app(app, **app.config["FLASK_TALISMAN_CONFIG"])
 
-    # Initialize CSRF protection.
-    csrf.init_app(app)
-
     # Initialize the database.
     db.init_app(app)
     migrate.init_app(app, db, directory=os.path.join(os.path.abspath(os.path.dirname(__file__)), "migrations"))

@@ -302,3 +302,16 @@ html, body {
     color: white;
     border: none;
 }
+.question-box {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.question-box h5 {
+    margin-bottom: 15px;
+}
+
+.question-box p {
+    margin-top: 10px;
+}
