@@ -217,6 +217,21 @@ class Assignments(db.Model):
                 return False
         return True
     
+    def get_ungraded_questions(self) -> list["Answers"]:
+        """Get a list of all answers that have not bee graded.
+
+        Returns
+        -------
+        list[Answers]
+            A list of all answers that have yet to be graded associated with
+            this quiz.
+        """
+        ungraded_answers = []
+        for answer in self.answers:
+            if answer.awarded_points is None:
+                ungraded_answers.append(answer)
+        return ungraded_answers
+
     def get_results(self) -> dict[str, int | float]:
         """Get the results of the quiz.
 

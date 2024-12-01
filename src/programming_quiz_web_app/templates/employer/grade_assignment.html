@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+Quiz in Progress
+{% endblock %}
+{% block app_content %}
+<div class="container-fluid">
+    <h2>Assignment Information:</h2>
+    <h5>{{ ungraded_answer.question_title }}</h5>
+    <p>{{ ungraded_answer.question }}</p>
+    <h5>Solution:</h5>
+    <p>{{ ungraded_answer.question_solution }}</p>
+    <h5>Possible Points:</h5>
+    <p>{{ ungraded_answer.possible_points }}</p>
+    <h2>Student Response:</h2>
+    <p>{{ ungraded_answer.answer }}</p>
+    <h2>Award Points:</h2>
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.awarded_points.label(class="form-label") }}
+            {{ form.awarded_points(class="form-control") }}
+            {% if form.awarded_points.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.awarded_points.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+        {{ form.submit(class="btn btn-dark w-100") }}
+    </form>
+</div>
+{% endblock %}
